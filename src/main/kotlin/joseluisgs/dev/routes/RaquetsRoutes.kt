@@ -16,7 +16,7 @@ private val logger = KotlinLogging.logger {}
 // Define endpoint
 private const val ENDPOINT = "api/racquets"
 
-fun Application.raquetsRoutes() {
+fun Application.racquetsRoutes() {
 
     // Repository
     val racquets: RacquetsRepository = RacquetsRepositoryImpl()
