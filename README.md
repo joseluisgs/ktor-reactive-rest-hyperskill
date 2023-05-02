@@ -22,7 +22,7 @@ This tutorials have been made to learn how to create a reactive service with a R
 
 You can find the following tutorials in the [Hyperskill Medium blog](https://medium.com/hyperskill).
 
-
+ You can also follow us on social media to stay up-to-date with our latest articles and projects. We are on [Reddit](https://www.reddit.com/r/Hyperskill/), [LinkedIn](https://www.linkedin.com/company/hyperskill/), and [Facebook](https://www.facebook.com/myhyperskill).
 
  ## Author
  Coded with :sparkling_heart: by [José Luis González Sánchez](https://twitter.com/joseluisgonsan). Member of the Kotlin Team in Hyperskill.
