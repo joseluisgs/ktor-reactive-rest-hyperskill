@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 /**
  * Racquet model
  */
-@Serializable
+
 data class Racquet(
     val id: Long = NEW_RACQUET,
     val brand: String,
@@ -17,7 +17,8 @@ data class Racquet(
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime = LocalDateTime.now(),
     @Serializable(with = LocalDateTimeSerializer::class)
-    val updatedAt: LocalDateTime = LocalDateTime.now()
+    val updatedAt: LocalDateTime = LocalDateTime.now(),
+    val isDeleted: Boolean = false
 ) {
     companion object {
         const val NEW_RACQUET = -1L

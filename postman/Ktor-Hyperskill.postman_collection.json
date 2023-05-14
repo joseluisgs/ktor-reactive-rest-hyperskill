@@ -119,13 +119,13 @@
 			"response": []
 		},
 		{
-			"name": "DELETE",
+			"name": "UPDATE",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": 5,\n    \"brand\": \"Updated Racquet\",\n    \"model\": \"Updated Model\",\n    \"price\": 200.0,\n    \"numberTenisPlayers\": 10\n}",
+					"raw": "{\n    \"brand\": \"Updated Racquet\",\n    \"model\": \"Updated Model\",\n    \"price\": 200.0,\n    \"numberTenisPlayers\": 10\n}",
 					"options": {
 						"raw": {
 							"language": "json"

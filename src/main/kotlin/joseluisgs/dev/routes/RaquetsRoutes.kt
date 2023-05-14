@@ -5,7 +5,9 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import joseluisgs.dev.models.Racquet
+import joseluisgs.dev.dto.RacquetRequest
+import joseluisgs.dev.mappers.toModel
+import joseluisgs.dev.mappers.toResponse
 import joseluisgs.dev.repositories.raquets.RacquetsRepository
 import joseluisgs.dev.repositories.raquets.RacquetsRepositoryImpl
 import kotlinx.coroutines.flow.toList
@@ -13,7 +15,12 @@ import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-// Define endpoint
+/**
+ * Racquets routes for our API
+ * We define the routes for our API based on the endpoint
+ * to manage the racquets
+ * We use the repository to manage the data to perform the CRUD operations
+ */
 private const val ENDPOINT = "api/racquets"
 
 fun Application.racquetsRoutes() {
@@ -36,13 +43,15 @@ fun Application.racquetsRoutes() {
                 if (page != null && page > 0) {
                     logger.debug { "GET ALL /$ENDPOINT?page=$page&perPage=$perPage" }
 
-                    racquets.findAllPageable(page - 1, perPage).toList()
-                        .run { call.respond(HttpStatusCode.OK, this) }
+                    racquets.findAllPageable(page - 1, perPage)
+                        .toList()
+                        .run { call.respond(HttpStatusCode.OK, this.toResponse()) }
                 } else {
                     logger.debug { "GET ALL /$ENDPOINT" }
 
-                    racquets.findAll().toList()
-                        .run { call.respond(HttpStatusCode.OK, this) }
+                    racquets.findAll()
+                        .toList()
+                        .run { call.respond(HttpStatusCode.OK, this.toResponse()) }
                 }
             }
 
@@ -52,7 +61,8 @@ fun Application.racquetsRoutes() {
 
                 val id = call.parameters["id"]?.toLongOrNull()
                 id?.let {
-                    racquets.findById(it)?.run { call.respond(HttpStatusCode.OK, this) }
+                    racquets.findById(it)
+                        ?.run { call.respond(HttpStatusCode.OK, this.toResponse()) }
                         ?: call.respond(HttpStatusCode.NotFound, "Racquet not found with ID $id")
                 } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
             }
@@ -63,8 +73,9 @@ fun Application.racquetsRoutes() {
 
                 val brand = call.parameters["brand"]
                 brand?.let {
-                    racquets.findByBrand(it).toList()
-                        .run { call.respond(HttpStatusCode.OK, this) }
+                    racquets.findByBrand(it)
+                        .toList()
+                        .run { call.respond(HttpStatusCode.OK, this.toResponse()) }
                 } ?: call.respond(HttpStatusCode.BadRequest, "Brand is not a string")
             }
 
@@ -72,9 +83,9 @@ fun Application.racquetsRoutes() {
             post {
                 logger.debug { "POST /$ENDPOINT" }
 
-                val racquet = call.receive<Racquet>()
-                racquets.save(racquet)
-                    .run { call.respond(HttpStatusCode.Created, this) }
+                val racquetRequest = call.receive<RacquetRequest>().toModel()
+                racquets.save(racquetRequest)
+                    .run { call.respond(HttpStatusCode.Created, this.toResponse()) }
             }
 
             // Update a racquet --> PUT /api/racquets/{id}
@@ -83,11 +94,11 @@ fun Application.racquetsRoutes() {
 
                 val id = call.parameters["id"]?.toLongOrNull()
                 id?.let {
-                    val racquet = call.receive<Racquet>()
+                    val racquet = call.receive<RacquetRequest>().toModel()
                     // exists?
-                    racquets.findById(it)?.let {
-                        racquets.save(racquet)
-                            .run { call.respond(HttpStatusCode.OK, this) }
+                    racquets.findById(id)?.let {
+                        racquets.save(racquet.copy(id = id))
+                            .run { call.respond(HttpStatusCode.OK, this.toResponse()) }
                     } ?: call.respond(HttpStatusCode.NotFound, "Racquet not found with ID $id")
                 } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
             }
@@ -99,7 +110,7 @@ fun Application.racquetsRoutes() {
                 val id = call.parameters["id"]?.toLongOrNull()
                 id?.let {
                     // exists?
-                    racquets.findById(it)?.let { racquet ->
+                    racquets.findById(id)?.let { racquet ->
                         racquets.delete(racquet)
                             .run { call.respond(HttpStatusCode.NoContent) }
                     } ?: call.respond(HttpStatusCode.NotFound, "Racquet not found with ID $id")
