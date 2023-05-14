@@ -50,7 +50,7 @@ class RacquetsRepositoryImpl : RacquetsRepository {
     override suspend fun save(entity: Racquet): Racquet = withContext(Dispatchers.IO) {
         logger.debug { "save: $entity" }
 
-        if (entity.id == Racquet.NEW_RAQUET) {
+        if (entity.id == Racquet.NEW_RACQUET) {
             create(entity)
         } else {
             update(entity)

@@ -10,19 +10,27 @@ Example of a Reactive REST API with Ktor based on Hyperskill tracks
 
 - [Ktor Reactive REST API for Hyperskill](#ktor-reactive-rest-api-for-hyperskill)
   - [About this project](#about-this-project)
+    - [Parts of the tutorial and Repositories](#parts-of-the-tutorial-and-repositories)
   - [Author](#author)
     - [Contact](#contact)
     - [Coffee?](#coffee)
   - [License](#license)
 
 ## About this project
-This is an example of a Reactive REST API with Ktor and Kotlin using techniques tha you can learn on the different Hyperskill tracks. 
+This is an example of a Reactive REST API with Ktor and Kotlin using techniques tha you can learn on the different Hyperskill tracks.
 
 This tutorials have been made to learn how to create a reactive service with a Reactive REST API with [Ktor](https://ktor.io/) with [Kotlin](https://kotlinlang.org/) technologies.
 
 You can find the following tutorials in the [Hyperskill Medium blog](https://medium.com/hyperskill).
 
- You can also follow us on social media to stay up-to-date with our latest articles and projects. We are on [Reddit](https://www.reddit.com/r/Hyperskill/), [LinkedIn](https://www.linkedin.com/company/hyperskill/), and [Facebook](https://www.facebook.com/myhyperskill).
+You can also follow us on social media to stay up-to-date with our latest articles and projects. We are on [Reddit](https://www.reddit.com/r/Hyperskill/), [LinkedIn](https://www.linkedin.com/company/hyperskill/), and [Facebook](https://www.facebook.com/myhyperskill).
+
+### Parts of the tutorial and Repositories
+You can find the following parts of the tutorial in the following repository: [Ktor Reactive REST API for Hyperskill](https://github.com/joseluisgs/ktor-reactive-rest-hyperskill).
+
+In this repository you can find the following parts of the tutorial in each commit and the end result in the last commit and tag:
+- [Part 1: Reactive REST API with Ktor and Kotlin](
+
 
  ## Author
  Coded with :sparkling_heart: by [José Luis González Sánchez](https://twitter.com/joseluisgonsan). Member of the Kotlin Team in Hyperskill.
