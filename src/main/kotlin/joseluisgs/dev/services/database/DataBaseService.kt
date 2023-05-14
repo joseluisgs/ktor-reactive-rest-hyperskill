@@ -5,6 +5,7 @@ import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactoryOptions
 import joseluisgs.dev.data.racketsDemoData
 import joseluisgs.dev.entities.RacketTable
+import joseluisgs.dev.mappers.toEntity
 import joseluisgs.dev.models.Racket
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -90,7 +91,7 @@ class DataBaseService(
         logger.debug { "saving rackets demo data..." }
         launch {
             racketsDemoData().forEach {
-                client insert it.value.copy(id = Racket.NEW_RACKET)
+                client insert it.value.copy(id = Racket.NEW_RACKET).toEntity()
             }
         }
     }

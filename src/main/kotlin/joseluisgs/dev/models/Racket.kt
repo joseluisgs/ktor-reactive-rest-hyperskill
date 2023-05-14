@@ -9,7 +9,7 @@ import java.time.LocalDateTime
  */
 
 data class Racket(
-    val id: Long? = NEW_RACKET,
+    val id: Long = NEW_RACKET,
     val brand: String,
     val model: String,
     val price: Double,
@@ -22,7 +22,7 @@ data class Racket(
     val isDeleted: Boolean = false
 ) {
     companion object {
-        val NEW_RACKET = null
+        val NEW_RACKET = -1L
         const val DEFAULT_IMAGE =
             "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Tennis_Racket_and_Balls.jpg/800px-Tennis_Racket_and_Balls.jpg"
     }

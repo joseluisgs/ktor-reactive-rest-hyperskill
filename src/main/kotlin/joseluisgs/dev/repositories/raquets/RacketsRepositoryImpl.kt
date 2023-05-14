@@ -1,11 +1,14 @@
 package joseluisgs.dev.repositories.raquets
 
 import joseluisgs.dev.entities.RacketTable
+import joseluisgs.dev.mappers.toEntity
+import joseluisgs.dev.mappers.toModel
 import joseluisgs.dev.models.Racket
 import joseluisgs.dev.services.database.DataBaseService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import java.time.LocalDateTime
@@ -23,7 +26,7 @@ class RacketsRepositoryImpl(
         logger.debug { "findAll" }
 
         return@withContext (dataBaseService.client selectFrom RacketTable)
-            .fetchAll()
+            .fetchAll().map { it.toModel() }
     }
 
     override suspend fun findById(id: Long): Racket? = withContext(Dispatchers.IO) {
@@ -31,7 +34,7 @@ class RacketsRepositoryImpl(
 
         return@withContext (dataBaseService.client selectFrom RacketTable
                 where RacketTable.id eq id)
-            .fetchFirstOrNull()
+            .fetchFirstOrNull()?.toModel()
     }
 
     override suspend fun findAllPageable(page: Int, perPage: Int): Flow<Racket> = withContext(Dispatchers.IO) {
@@ -42,7 +45,7 @@ class RacketsRepositoryImpl(
 
         return@withContext (dataBaseService.client selectFrom RacketTable
                 limit myLimit offset myOffset)
-            .fetchAll()
+            .fetchAll().map { it.toModel() }
 
     }
 
@@ -51,6 +54,7 @@ class RacketsRepositoryImpl(
         return@withContext (dataBaseService.client selectFrom RacketTable)
             .fetchAll()
             .filter { it.brand.contains(brand, true) }
+            .map { it.toModel() }
     }
 
     override suspend fun save(entity: Racket): Racket = withContext(Dispatchers.IO) {
@@ -65,13 +69,14 @@ class RacketsRepositoryImpl(
 
     private suspend fun create(entity: Racket): Racket {
         val newEntity = entity.copy(createdAt = LocalDateTime.now(), updatedAt = LocalDateTime.now())
+            .toEntity()
         logger.debug { "create: $newEntity" }
-        return (dataBaseService.client insertAndReturn newEntity)
+        return (dataBaseService.client insertAndReturn newEntity).toModel()
     }
 
     private suspend fun update(entity: Racket): Racket {
         logger.debug { "update: $entity" }
-        val updateEntity = entity.copy(updatedAt = LocalDateTime.now())
+        val updateEntity = entity.copy(updatedAt = LocalDateTime.now()).toEntity()
 
         (dataBaseService.client update RacketTable
                 set RacketTable.brand eq updateEntity.brand
@@ -79,16 +84,16 @@ class RacketsRepositoryImpl(
                 set RacketTable.price eq updateEntity.price
                 set RacketTable.numberTenisPlayers eq updateEntity.numberTenisPlayers
                 set RacketTable.image eq updateEntity.image
-                where RacketTable.id eq updateEntity.id!!)
+                where RacketTable.id eq entity.id)
             .execute()
-        return updateEntity
+        return updateEntity.toModel()
     }
 
 
     override suspend fun delete(entity: Racket): Racket {
         logger.debug { "delete: $entity" }
         (dataBaseService.client deleteFrom RacketTable
-                where RacketTable.id eq entity.id!!)
+                where RacketTable.id eq entity.id)
             .execute()
         return entity
     }
