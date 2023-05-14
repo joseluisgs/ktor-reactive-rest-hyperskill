@@ -1,8 +1,8 @@
 package joseluisgs.dev.mappers
 
-import joseluisgs.dev.dto.RacquetRequest
-import joseluisgs.dev.dto.RacquetResponse
-import joseluisgs.dev.models.Racquet
+import joseluisgs.dev.dto.RacketRequest
+import joseluisgs.dev.dto.RacketResponse
+import joseluisgs.dev.models.Racket
 
 /**
  * Mapper for Racquet
@@ -10,24 +10,25 @@ import joseluisgs.dev.models.Racquet
  * In Kotlin we can use extension functions
  */
 
-fun RacquetRequest.toModel() = Racquet(
+fun RacketRequest.toModel() = Racket(
     brand = this.brand,
     model = this.model,
     price = this.price,
     numberTenisPlayers = this.numberTenisPlayers
 )
 
-fun List<RacquetRequest>.toModel() = this.map { it.toModel() }
+fun List<RacketRequest>.toModel() = this.map { it.toModel() }
 
-fun Racquet.toResponse() = RacquetResponse(
+fun Racket.toResponse() = RacketResponse(
     id = this.id,
     brand = this.brand,
     model = this.model,
     price = this.price,
     numberTenisPlayers = this.numberTenisPlayers,
+    image = this.image,
     createdAt = this.createdAt,
     updatedAt = this.updatedAt.toString(),
     isDeleted = this.isDeleted
 )
 
-fun List<Racquet>.toResponse() = this.map { it.toResponse() }
+fun List<Racket>.toResponse() = this.map { it.toResponse() }

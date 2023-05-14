@@ -12,7 +12,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://0.0.0.0:8080/api/racquets",
+					"raw": "http://0.0.0.0:8080/api/rackets",
 					"protocol": "http",
 					"host": [
 						"0",
@@ -23,7 +23,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"racquets"
+						"rackets"
 					]
 				}
 			},
@@ -35,7 +35,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://0.0.0.0:8080/api/racquets?page=1&perPage=2",
+					"raw": "http://0.0.0.0:8080/api/rackets?page=1&perPage=2",
 					"protocol": "http",
 					"host": [
 						"0",
@@ -46,7 +46,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"racquets"
+						"rackets"
 					],
 					"query": [
 						{
@@ -68,7 +68,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://0.0.0.0:8080/api/racquets/1",
+					"raw": "http://0.0.0.0:8080/api/rackets/1",
 					"protocol": "http",
 					"host": [
 						"0",
@@ -79,7 +79,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"racquets",
+						"rackets",
 						"1"
 					]
 				}
@@ -101,7 +101,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://0.0.0.0:8080/api/racquets",
+					"raw": "http://0.0.0.0:8080/api/rackets",
 					"protocol": "http",
 					"host": [
 						"0",
@@ -112,7 +112,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"racquets"
+						"rackets"
 					]
 				}
 			},
@@ -133,7 +133,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://0.0.0.0:8080/api/racquets/5",
+					"raw": "http://0.0.0.0:8080/api/rackets/5",
 					"protocol": "http",
 					"host": [
 						"0",
@@ -144,7 +144,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"racquets",
+						"rackets",
 						"5"
 					]
 				}
@@ -166,7 +166,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://0.0.0.0:8080/api/racquets/5",
+					"raw": "http://0.0.0.0:8080/api/rackets/5",
 					"protocol": "http",
 					"host": [
 						"0",
@@ -177,7 +177,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"racquets",
+						"rackets",
 						"5"
 					]
 				}

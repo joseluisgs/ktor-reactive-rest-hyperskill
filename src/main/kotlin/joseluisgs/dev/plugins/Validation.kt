@@ -2,7 +2,7 @@ package joseluisgs.dev.plugins
 
 import io.ktor.server.application.*
 import io.ktor.server.plugins.requestvalidation.*
-import joseluisgs.dev.validators.racquetValidation
+import joseluisgs.dev.validators.racketValidation
 
 /**
  * Configure the validation plugin
@@ -12,6 +12,6 @@ import joseluisgs.dev.validators.racquetValidation
  */
 fun Application.configureValidation() {
     install(RequestValidation) {
-        racquetValidation()
+        racketValidation()
     }
 }

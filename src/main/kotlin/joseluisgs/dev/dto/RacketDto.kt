@@ -1,5 +1,6 @@
 package joseluisgs.dev.dto
 
+import joseluisgs.dev.models.Racket.Companion.DEFAULT_IMAGE
 import joseluisgs.dev.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
@@ -12,20 +13,22 @@ import java.time.LocalDateTime
  */
 
 @Serializable
-data class RacquetRequest(
+data class RacketRequest(
     val brand: String,
     val model: String,
     val price: Double,
     val numberTenisPlayers: Int = 0,
+    val image: String = DEFAULT_IMAGE,
 )
 
 @Serializable
-data class RacquetResponse(
+data class RacketResponse(
     val id: Long,
     val brand: String,
     val model: String,
     val price: Double,
     val numberTenisPlayers: Int,
+    val image: String,
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime,
     val updatedAt: String,
