@@ -15,11 +15,12 @@ fun RacketRequest.toModel() = Racket(
     brand = this.brand,
     model = this.model,
     price = this.price,
-    numberTenisPlayers = this.numberTenisPlayers
+    numberTenisPlayers = this.numberTenisPlayers,
+    image = this.image
 )
 
-@JvmName("fromRacketRequestListToModel")
-fun List<RacketRequest>.toModel() = this.map { it.toModel() }
+// @JvmName("fromRacketRequestListToModel")
+//fun List<RacketRequest>.toModel() = this.map { it.toModel() }
 
 fun Racket.toResponse() = RacketResponse(
     id = this.id,
@@ -48,7 +49,7 @@ fun RacketEntity.toModel() = Racket(
     isDeleted = this.isDeleted
 )
 
-@JvmName("fromRacketEntityListToModel")
+//@JvmName("fromRacketEntityListToModel")
 fun List<RacketEntity>.toModel() = this.map { it.toModel() }
 
 fun Racket.toEntity() = RacketEntity(
@@ -63,4 +64,4 @@ fun Racket.toEntity() = RacketEntity(
     isDeleted = this.isDeleted
 )
 
-fun List<Racket>.toEntity() = this.map { it.toEntity() }
+//fun List<Racket>.toEntity() = this.map { it.toEntity() }
