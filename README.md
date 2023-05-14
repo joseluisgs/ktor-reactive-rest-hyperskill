@@ -29,8 +29,7 @@ You can also follow us on social media to stay up-to-date with our latest articl
 You can find the following parts of the tutorial in the following repository: [Ktor Reactive REST API for Hyperskill](https://github.com/joseluisgs/ktor-reactive-rest-hyperskill).
 
 In this repository you can find the following parts of the tutorial in each commit and the end result in the last commit and tag:
-- [Part 1: Reactive REST API with Ktor and Kotlin](
-
+- [Part 1: Reactive REST API with Ktor and Kotlin](https://github.com/joseluisgs/ktor-reactive-rest-hyperskill/releases/tag/0.0.1)
 
  ## Author
  Coded with :sparkling_heart: by [José Luis González Sánchez](https://twitter.com/joseluisgonsan). Member of the Kotlin Team in Hyperskill.
