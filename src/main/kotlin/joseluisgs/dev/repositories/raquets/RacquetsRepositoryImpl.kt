@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 private val logger = KotlinLogging.logger {}
 
 /**
- * Repository of Raquets with CRUD operations
+ * Repository of Racquets with CRUD operations
  */
 class RacquetsRepositoryImpl : RacquetsRepository {
 

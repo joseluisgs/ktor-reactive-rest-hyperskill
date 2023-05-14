@@ -7,6 +7,8 @@ import joseluisgs.dev.routes.racquetsRoutes
 
 /**
  * Define the routing of our application based a DSL
+ * https://ktor.io/docs/routing-in-ktor.html
+ * we can define our routes in separate files like routes package
  */
 fun Application.configureRouting() {
     routing {
