@@ -20,7 +20,7 @@ fun RacketRequest.toModel() = Racket(
 fun List<RacketRequest>.toModel() = this.map { it.toModel() }
 
 fun Racket.toResponse() = RacketResponse(
-    id = this.id,
+    id = this.id!!,
     brand = this.brand,
     model = this.model,
     price = this.price,

@@ -6,6 +6,11 @@ val logback_version: String by project
 val micrologging_version: String by project
 val logbackclassic_version: String by project
 
+// Database
+// Bases de datos
+val kotysa_version: String by project
+val h2_r2dbc_version: String by project
+
 plugins {
     kotlin("jvm") version "1.8.21"
     id("io.ktor.plugin") version "2.3.0"
@@ -44,6 +49,10 @@ dependencies {
     // implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("ch.qos.logback:logback-classic:$logbackclassic_version")
     implementation("io.github.microutils:kotlin-logging-jvm:$micrologging_version")
+
+    // Database R2DBC-H2 and Kotysa
+    implementation("org.ufoss.kotysa:kotysa-r2dbc:$kotysa_version")
+    implementation("io.r2dbc:r2dbc-h2:$h2_r2dbc_version")
 
     // Testing
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")

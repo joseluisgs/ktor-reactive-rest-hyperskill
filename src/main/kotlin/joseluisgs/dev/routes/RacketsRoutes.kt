@@ -10,6 +10,7 @@ import joseluisgs.dev.mappers.toModel
 import joseluisgs.dev.mappers.toResponse
 import joseluisgs.dev.repositories.raquets.RacketsRepository
 import joseluisgs.dev.repositories.raquets.RacketsRepositoryImpl
+import joseluisgs.dev.services.database.DataBaseService
 import kotlinx.coroutines.flow.toList
 import mu.KotlinLogging
 
@@ -26,7 +27,9 @@ private const val ENDPOINT = "api/rackets"
 fun Application.racketsRoutes() {
 
     // Repository
-    val racquets: RacketsRepository = RacketsRepositoryImpl()
+    val racquets: RacketsRepository = RacketsRepositoryImpl(
+        DataBaseService(environment.config)
+    )
 
     // Define routing based on endpoint
     routing {

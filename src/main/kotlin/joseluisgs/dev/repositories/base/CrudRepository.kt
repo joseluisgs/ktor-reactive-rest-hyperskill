@@ -12,7 +12,7 @@ interface CrudRepository<T, ID> {
     suspend fun findAll(): Flow<T>
     suspend fun findById(id: ID): T?
     suspend fun save(entity: T): T
-    suspend fun delete(entity: T): T?
+    suspend fun delete(entity: T): T
     suspend fun deleteAll()
     suspend fun saveAll(entities: Iterable<T>): Flow<T>
 }
