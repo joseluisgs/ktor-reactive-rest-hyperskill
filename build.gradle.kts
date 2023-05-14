@@ -7,9 +7,12 @@ val micrologging_version: String by project
 val logbackclassic_version: String by project
 
 // Database
-// Bases de datos
 val kotysa_version: String by project
 val h2_r2dbc_version: String by project
+
+// Testing
+val junit_version: String by project
+val coroutines_test_version: String by project
 
 plugins {
     kotlin("jvm") version "1.8.21"
@@ -56,5 +59,15 @@ dependencies {
 
     // Testing
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    // testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    // JUnit 5 instead of JUnit 4
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junit_version")
+    // To test coroutines and suspend functions
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version")
+
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

@@ -17,8 +17,12 @@ import org.ufoss.kotysa.tables
 
 private val logger = KotlinLogging.logger {}
 
+/**
+ * DataBase Service to connect to our database
+ * @param dataBaseConfig Configuration of our database from application.conf
+ */
 class DataBaseService(
-    private val dataBaseConfig: ApplicationConfig
+    private val dataBaseConfig: ApplicationConfig = ApplicationConfig("application.conf")
 ) {
 
     private val connectionFactory by lazy {
@@ -55,9 +59,14 @@ class DataBaseService(
         createTables()
         // Init data
         if (initDatabaseData) {
-            clearDataBaseData()
-            initDataBaseData()
+            initDataBaseDataDemo()
         }
+    }
+
+    // demo data
+    suspend fun initDataBaseDataDemo() {
+        clearDataBaseData()
+        initDataBaseData()
     }
 
     // Create tables if not exists

@@ -28,6 +28,7 @@ fun Application.racketsRoutes() {
 
     // Repository
     val racquets: RacketsRepository = RacketsRepositoryImpl(
+        // We pass the configuration from environment or default parameter value
         DataBaseService(environment.config)
     )
 
