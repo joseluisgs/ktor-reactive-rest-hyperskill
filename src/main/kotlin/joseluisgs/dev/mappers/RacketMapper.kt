@@ -19,8 +19,10 @@ fun RacketRequest.toModel() = Racket(
     image = this.image
 )
 
-// @JvmName("fromRacketRequestListToModel")
-//fun List<RacketRequest>.toModel() = this.map { it.toModel() }
+/*
+@JvmName("fromRacketRequestListToModel")
+fun List<RacketRequest>.toModel() = this.map { it.toModel() }
+*/
 
 fun Racket.toResponse() = RacketResponse(
     id = this.id,

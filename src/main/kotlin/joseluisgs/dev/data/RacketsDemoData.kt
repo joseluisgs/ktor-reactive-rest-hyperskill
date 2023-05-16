@@ -3,6 +3,7 @@ package joseluisgs.dev.data
 import joseluisgs.dev.models.Racket
 import java.time.LocalDateTime
 
+
 fun racketsDemoData(): MutableMap<Long, Racket> = mutableMapOf(
     1L to Racket(
         1L,

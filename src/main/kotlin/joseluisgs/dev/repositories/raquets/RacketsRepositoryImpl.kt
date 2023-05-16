@@ -89,7 +89,6 @@ class RacketsRepositoryImpl(
         return updateEntity.toModel()
     }
 
-
     override suspend fun delete(entity: Racket): Racket {
         logger.debug { "delete: $entity" }
         (dataBaseService.client deleteFrom RacketTable

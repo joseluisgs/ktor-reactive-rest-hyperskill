@@ -25,6 +25,8 @@ You can find the following tutorials in the [Hyperskill Medium blog](https://med
 
 You can also follow us on social media to stay up-to-date with our latest articles and projects. We are on [Reddit](https://www.reddit.com/r/Hyperskill/), [LinkedIn](https://www.linkedin.com/company/hyperskill/), and [Facebook](https://www.facebook.com/myhyperskill).
 
+![image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*6sqcDNSinKG2uQb7UrJB7A.png)
+
 ### Parts of the tutorial and Repositories
 You can find the following parts of the tutorial in the following repository: [Ktor Reactive REST API for Hyperskill](https://github.com/joseluisgs/ktor-reactive-rest-hyperskill).
 

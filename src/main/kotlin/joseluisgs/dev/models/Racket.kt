@@ -1,7 +1,5 @@
 package joseluisgs.dev.models
 
-import joseluisgs.dev.serializers.LocalDateTimeSerializer
-import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
 /**
@@ -15,9 +13,7 @@ data class Racket(
     val price: Double,
     val numberTenisPlayers: Int = 0,
     val image: String = DEFAULT_IMAGE,
-    @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime = LocalDateTime.now(),
-    @Serializable(with = LocalDateTimeSerializer::class)
     val updatedAt: LocalDateTime = LocalDateTime.now(),
     val isDeleted: Boolean = false
 ) {
