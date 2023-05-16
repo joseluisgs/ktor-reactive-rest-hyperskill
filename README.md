@@ -23,6 +23,8 @@ This tutorials have been made to learn how to create a reactive service with a R
 
 You can find the following tutorials in the [Hyperskill Medium blog](https://medium.com/hyperskill).
 
+- [Part I: Set-up and your first end-point](https://medium.com/hyperskill/creating-your-reactive-rest-api-with-kotlin-and-ktor-part-i-f217be55c0bf)
+
 You can also follow us on social media to stay up-to-date with our latest articles and projects. We are on [Reddit](https://www.reddit.com/r/Hyperskill/), [LinkedIn](https://www.linkedin.com/company/hyperskill/), and [Facebook](https://www.facebook.com/myhyperskill).
 
 ![image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*6sqcDNSinKG2uQb7UrJB7A.png)
