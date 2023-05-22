@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
+import kotlin.collections.set
 
 private val logger = KotlinLogging.logger {}
 
@@ -51,23 +52,26 @@ class RacketsServiceImpl(
         logger.debug { "findById: search racket by id" }
 
         // find in cache if not found find in repository
-        val racket = cacheService.rackets.get(id) ?: racketsRepository.findById(id)
-        return racket?.let {
-            cacheService.rackets.put(id, it) // save in cache last access
-            return Ok(it)
-        } ?: return Err(RacketError.NotFound("Racket with id $id not found"))
-
+        return cacheService.rackets.get(id)?.let {
+            logger.debug { "findById: found in cache" }
+            Ok(it)
+        } ?: run {
+            racketsRepository.findById(id)?.let { racket ->
+                logger.debug { "findById: found in repository" }
+                cacheService.rackets.put(id, racket)
+                Ok(racket)
+            } ?: Err(RacketError.NotFound("Racket with id $id not found"))
+        }
     }
 
     override suspend fun save(racket: Racket): Result<Racket, RacketError> {
         logger.debug { "save: save racket" }
 
-        // save in cache and repository
-        val savedRacket = racketsRepository.save(racket)
-        cacheService.rackets.put(savedRacket.id, savedRacket)
-        return Ok(savedRacket).also { r ->
-            onChange(NotificationType.CREATE, r.value.id, r.value)
-        }
+        // return ok if we save in cache and repository
+        return Ok(racketsRepository.save(racket).also {
+            cacheService.rackets.put(it.id, it)
+            onChange(NotificationType.CREATE, it.id, it)
+        })
     }
 
     override suspend fun update(id: Long, racket: Racket): Result<Racket, RacketError> {
@@ -75,11 +79,19 @@ class RacketsServiceImpl(
 
         // find, if exists update in cache and repository
         return findById(id).andThen {
-            val updatedRacket = racketsRepository.save(it)
-            cacheService.rackets.put(updatedRacket.id, updatedRacket)
-            Ok(updatedRacket).also { r ->
-                onChange(NotificationType.UPDATE, r.value.id, r.value)
-            }
+            // Copy the new values over the existing values. Return OK if the racket was updated in the database and cache
+            Ok(racketsRepository.save(
+                it.copy(
+                    brand = racket.brand,
+                    model = racket.model,
+                    price = racket.price,
+                    image = racket.image,
+                    numberTenisPlayers = racket.numberTenisPlayers
+                )
+            ).also { res ->
+                cacheService.rackets.put(id, res)
+                onChange(NotificationType.UPDATE, id, res)
+            })
         }
     }
 
@@ -88,11 +100,10 @@ class RacketsServiceImpl(
 
         // find, if exists delete in cache and repository
         return findById(id).andThen {
-            racketsRepository.delete(it)
-            cacheService.rackets.invalidate(id)
-            Ok(it).also { r ->
-                onChange(NotificationType.DELETE, r.value.id, r.value)
-            }
+            Ok(racketsRepository.delete(it).also { res ->
+                cacheService.rackets.invalidate(id)
+                onChange(NotificationType.DELETE, id, res)
+            })
         }
     }
 
