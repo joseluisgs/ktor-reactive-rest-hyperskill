@@ -4,11 +4,17 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.andThen
+import joseluisgs.dev.dto.NotificacionDto.NotificationType
+import joseluisgs.dev.dto.RacketNotification
 import joseluisgs.dev.errors.racket.RacketError
+import joseluisgs.dev.mappers.toResponse
 import joseluisgs.dev.models.Racket
 import joseluisgs.dev.repositories.rackets.RacketsRepository
 import joseluisgs.dev.services.cache.CacheService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
@@ -59,7 +65,9 @@ class RacketsServiceImpl(
         // save in cache and repository
         val savedRacket = racketsRepository.save(racket)
         cacheService.rackets.put(savedRacket.id, savedRacket)
-        return Ok(savedRacket)
+        return Ok(savedRacket).also { r ->
+            onChange(NotificationType.CREATE, r.value.id, r.value)
+        }
     }
 
     override suspend fun update(id: Long, racket: Racket): Result<Racket, RacketError> {
@@ -69,7 +77,9 @@ class RacketsServiceImpl(
         return findById(id).andThen {
             val updatedRacket = racketsRepository.save(it)
             cacheService.rackets.put(updatedRacket.id, updatedRacket)
-            Ok(updatedRacket)
+            Ok(updatedRacket).also { r ->
+                onChange(NotificationType.UPDATE, r.value.id, r.value)
+            }
         }
     }
 
@@ -80,7 +90,48 @@ class RacketsServiceImpl(
         return findById(id).andThen {
             racketsRepository.delete(it)
             cacheService.rackets.invalidate(id)
-            Ok(it)
+            Ok(it).also { r ->
+                onChange(NotificationType.DELETE, r.value.id, r.value)
+            }
+        }
+    }
+
+    // Real Time Notifications and WebSockets
+    // Observable Pattern
+    private val suscriptors = mutableMapOf<Int, suspend (RacketNotification) -> Unit>()
+
+    // Add and remove suscriptors
+    override fun addSuscriptor(id: Int, suscriptor: suspend (RacketNotification) -> Unit) {
+        logger.debug { "addSuscriptor: add suscripto with ws id: $id" }
+
+        // Añadimos el suscriptor, que es la función que se ejecutará
+        suscriptors[id] = suscriptor
+    }
+
+    override fun removeSuscriptor(id: Int) {
+        logger.debug { "removeSuscriptor: Desconectando suscriptor con id: $" }
+
+        suscriptors.remove(id)
+    }
+
+    // Event when a change is produced
+    private suspend fun onChange(type: NotificationType, id: Long, data: Racket) {
+        logger.debug { "onChange: Notification on Rackets: $type, notification updates to clients: $data" }
+
+        // We use a corutine scope to execute the notification
+        val myScope = CoroutineScope(Dispatchers.IO)
+        // We send the notification to all suscriptors with the data
+        myScope.launch {
+            suscriptors.values.forEach {
+                it.invoke(
+                    RacketNotification(
+                        entity = "RACKET",
+                        type = type,
+                        id = id,
+                        data = data.toResponse()
+                    )
+                )
+            }
         }
     }
 }

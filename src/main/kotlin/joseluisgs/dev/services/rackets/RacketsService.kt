@@ -1,6 +1,7 @@
 package joseluisgs.dev.services.rackets
 
 import com.github.michaelbull.result.Result
+import joseluisgs.dev.dto.RacketNotification
 import joseluisgs.dev.errors.racket.RacketError
 import joseluisgs.dev.models.Racket
 import kotlinx.coroutines.flow.Flow
@@ -17,4 +18,9 @@ interface RacketsService {
     suspend fun save(racket: Racket): Result<Racket, RacketError>
     suspend fun update(id: Long, racket: Racket): Result<Racket, RacketError>
     suspend fun delete(id: Long): Result<Racket, RacketError>
+
+    // Real time with WebSockets
+    // Suscripción a cambios para notificar tiempo real
+    fun addSuscriptor(id: Int, suscriptor: suspend (RacketNotification) -> Unit)
+    fun removeSuscriptor(id: Int)
 }
