@@ -70,33 +70,32 @@ fun Application.racketsRoutes() {
             get("{id}") {
                 logger.debug { "GET BY ID /$ENDPOINT/{id}" }
 
-                val id = call.parameters["id"]?.toLongOrNull()
-                id?.let {
+                call.parameters["id"]?.toLong()?.let { id ->
                     racketsService.findById(id).mapBoth(
                         success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
                         failure = { handleRacketErrors(it) }
                     )
-                } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
+                }
             }
 
             // Get one racquet by brand --> GET /api/rackets/brand/{brand}
             get("brand/{brand}") {
                 logger.debug { "GET BY BRAND /$ENDPOINT/brand/{brand}" }
 
-                val brand = call.parameters["brand"]
-                brand?.let {
+                call.parameters["brand"]?.let {
                     racketsService.findByBrand(it)
                         .toList()
                         .run { call.respond(HttpStatusCode.OK, this.toResponse()) }
-                } ?: call.respond(HttpStatusCode.BadRequest, "Brand is not a string")
+                }
             }
 
             // Create a new racquet --> POST /api/rackets
             post {
                 logger.debug { "POST /$ENDPOINT" }
 
-                val racketRequest = call.receive<RacketRequest>().toModel()
-                racketsService.save(racketRequest).mapBoth(
+                racketsService.save(
+                    racket = call.receive<RacketRequest>().toModel()
+                ).mapBoth(
                     success = { call.respond(HttpStatusCode.Created, it.toResponse()) },
                     failure = { handleRacketErrors(it) }
                 )
@@ -106,27 +105,27 @@ fun Application.racketsRoutes() {
             put("{id}") {
                 logger.debug { "PUT /$ENDPOINT/{id}" }
 
-                val id = call.parameters["id"]?.toLongOrNull()
-                id?.let {
-                    val racket = call.receive<RacketRequest>().toModel()
-                    racketsService.update(id, racket).mapBoth(
+                call.parameters["id"]?.toLong()?.let { id ->
+                    racketsService.update(
+                        id = id,
+                        racket = call.receive<RacketRequest>().toModel()
+                    ).mapBoth(
                         success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
                         failure = { handleRacketErrors(it) }
                     )
-                } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
+                }
             }
 
             // Delete a racquet --> DELETE /api/rackets/{id}
             delete("{id}") {
                 logger.debug { "DELETE /$ENDPOINT/{id}" }
 
-                val id = call.parameters["id"]?.toLongOrNull()
-                id?.let {
+                call.parameters["id"]?.toLong()?.let { id ->
                     racketsService.delete(id).mapBoth(
                         success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
                         failure = { handleRacketErrors(it) }
                     )
-                } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
+                }
             }
         }
 
@@ -135,15 +134,13 @@ fun Application.racketsRoutes() {
             try {
                 // Observer Pattern with function
                 racketsService.addSuscriptor(this.hashCode()) {
-                    sendSerialized(it) // Enviamos las cosas
+                    sendSerialized(it) // Send message to client
                 }
                 sendSerialized("Notifications WS: Rackets - Rackets API")
-                // Every time we receive a message we ignore ir, only send
+                // Every time we receive a message we ignore it
                 for (frame in incoming) {
                     if (frame.frameType == FrameType.CLOSE) {
                         break
-                    } else if (frame is Frame.Text) {
-                        logger.debug { "Mensaje recibido por WS Representantes: ${frame.readText()}" }
                     }
                 }
             } finally {
@@ -160,5 +157,6 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.handleRacketErrors(
     when (error) {
         is RacketError.NotFound -> call.respond(HttpStatusCode.NotFound, error.message)
         is RacketError.BadRequest -> call.respond(HttpStatusCode.BadRequest, error.message)
+        // We can add more errors here
     }
 }
