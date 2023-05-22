@@ -74,7 +74,7 @@ fun Application.racketsRoutes() {
                 id?.let {
                     racketsService.findById(id).mapBoth(
                         success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
-                        failure = { handleRacketsErrors(it) }
+                        failure = { handleRacketErrors(it) }
                     )
                 } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
             }
@@ -98,7 +98,7 @@ fun Application.racketsRoutes() {
                 val racketRequest = call.receive<RacketRequest>().toModel()
                 racketsService.save(racketRequest).mapBoth(
                     success = { call.respond(HttpStatusCode.Created, it.toResponse()) },
-                    failure = { handleRacketsErrors(it) }
+                    failure = { handleRacketErrors(it) }
                 )
             }
 
@@ -111,7 +111,7 @@ fun Application.racketsRoutes() {
                     val racket = call.receive<RacketRequest>().toModel()
                     racketsService.update(id, racket).mapBoth(
                         success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
-                        failure = { handleRacketsErrors(it) }
+                        failure = { handleRacketErrors(it) }
                     )
                 } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
             }
@@ -124,7 +124,7 @@ fun Application.racketsRoutes() {
                 id?.let {
                     racketsService.delete(id).mapBoth(
                         success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
-                        failure = { handleRacketsErrors(it) }
+                        failure = { handleRacketErrors(it) }
                     )
                 } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
             }
@@ -154,7 +154,7 @@ fun Application.racketsRoutes() {
 }
 
 // Error handling for our API based on the error type and message
-private suspend fun PipelineContext<Unit, ApplicationCall>.handleRacketsErrors(
+private suspend fun PipelineContext<Unit, ApplicationCall>.handleRacketErrors(
     error: RacketError,
 ) {
     when (error) {
