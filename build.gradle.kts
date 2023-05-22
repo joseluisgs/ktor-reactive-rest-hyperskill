@@ -14,6 +14,12 @@ val h2_r2dbc_version: String by project
 val junit_version: String by project
 val coroutines_test_version: String by project
 
+// Cache
+val cache_version: String by project
+
+// Result
+val result_version: String by project
+
 plugins {
     kotlin("jvm") version "1.8.21"
     id("io.ktor.plugin") version "2.3.0"
@@ -56,6 +62,12 @@ dependencies {
     // Database R2DBC-H2 and Kotysa
     implementation("org.ufoss.kotysa:kotysa-r2dbc:$kotysa_version")
     implementation("io.r2dbc:r2dbc-h2:$h2_r2dbc_version")
+
+    // Cache 4K for in-memory cache
+    implementation("io.github.reactivecircus.cache4k:cache4k:$cache_version")
+
+    // Result for error handling Railway Oriented Programming
+    implementation("com.michael-bull.kotlin-result:kotlin-result:$result_version")
 
     // Testing
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
