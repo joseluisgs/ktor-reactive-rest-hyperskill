@@ -132,19 +132,20 @@ fun Application.racketsRoutes() {
         // WebSockets Real Time Updates and Notifications
         webSocket("/$ENDPOINT/notifications") {
             try {
-                // Observer Pattern with function
-                racketsService.addSuscriptor(this.hashCode()) {
-                    sendSerialized(it) // Send message to client
+                // Observer Pattern. Subscribe to the service with a hashcode
+                // and a function to send the message to the client
+                racketsService.addSubscriber(this.hashCode()) {
+                    sendSerialized(it) // WS function to send the message to the client
                 }
                 sendSerialized("Notifications WS: Rackets - Rackets API")
-                // Every time we receive a message we ignore it
+                // Every time we receive a WS message we ignore it
                 for (frame in incoming) {
                     if (frame.frameType == FrameType.CLOSE) {
                         break
                     }
                 }
             } finally {
-                racketsService.removeSuscriptor(this.hashCode())
+                racketsService.removeSubscriber(this.hashCode())
             }
         }
     }

@@ -16,7 +16,7 @@ data class NotificacionDto<T>(
     val id: Long,
     val data: T,
     @Serializable(with = LocalDateTimeSerializer::class)
-    val createdAt: LocalDateTime? = LocalDateTime.now()
+    val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
     enum class NotificationType { CREATE, UPDATE, DELETE }
 }

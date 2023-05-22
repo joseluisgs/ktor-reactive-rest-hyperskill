@@ -19,8 +19,7 @@ interface RacketsService {
     suspend fun update(id: Long, racket: Racket): Result<Racket, RacketError>
     suspend fun delete(id: Long): Result<Racket, RacketError>
 
-    // Real time with WebSockets
-    // Suscripción a cambios para notificar tiempo real
-    fun addSuscriptor(id: Int, suscriptor: suspend (RacketNotification) -> Unit)
-    fun removeSuscriptor(id: Int)
+    // Real time with WebSockets. Subscribe and unsubscribe to notifications
+    fun addSubscriber(id: Int, subscriber: suspend (RacketNotification) -> Unit)
+    fun removeSubscriber(id: Int)
 }
