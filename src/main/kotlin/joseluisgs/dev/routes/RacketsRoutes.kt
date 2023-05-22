@@ -6,7 +6,9 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.websocket.*
 import io.ktor.util.pipeline.*
+import io.ktor.websocket.*
 import joseluisgs.dev.dto.RacketRequest
 import joseluisgs.dev.errors.racket.RacketError
 import joseluisgs.dev.mappers.toModel
@@ -125,6 +127,27 @@ fun Application.racketsRoutes() {
                         failure = { handleRacketsErrors(it) }
                     )
                 } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
+            }
+        }
+
+        // WebSockets Real Time Updates and Notifications
+        webSocket("/$ENDPOINT/notifications") {
+            try {
+                // Observer Pattern with function
+                racketsService.addSuscriptor(this.hashCode()) {
+                    sendSerialized(it) // Enviamos las cosas
+                }
+                sendSerialized("Notifications WS: Rackets - Rackets API")
+                // Every time we receive a message we ignore ir, only send
+                for (frame in incoming) {
+                    if (frame.frameType == FrameType.CLOSE) {
+                        break
+                    } else if (frame is Frame.Text) {
+                        logger.debug { "Mensaje recibido por WS Representantes: ${frame.readText()}" }
+                    }
+                }
+            } finally {
+                racketsService.removeSuscriptor(this.hashCode())
             }
         }
     }
