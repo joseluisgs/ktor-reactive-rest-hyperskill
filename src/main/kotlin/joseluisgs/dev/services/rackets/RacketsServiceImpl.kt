@@ -53,7 +53,7 @@ class RacketsServiceImpl(
         // find in cache if not found find in repository
         val racket = cacheService.rackets.get(id) ?: racketsRepository.findById(id)
         return racket?.let {
-            cacheService.rackets.put(id, it) // save in cache
+            cacheService.rackets.put(id, it) // save in cache last access
             return Ok(it)
         } ?: return Err(RacketError.NotFound("Racket with id $id not found"))
 

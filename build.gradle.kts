@@ -13,6 +13,7 @@ val h2_r2dbc_version: String by project
 // Testing
 val junit_version: String by project
 val coroutines_test_version: String by project
+val mockk_version: String by project
 
 // Cache
 val cache_version: String by project
@@ -80,6 +81,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junit_version")
     // To test coroutines and suspend functions
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version")
+    // MockK to test with mocks
+    testImplementation("io.mockk:mockk:$mockk_version")
 
 }
 
