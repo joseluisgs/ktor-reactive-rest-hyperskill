@@ -2,6 +2,7 @@ package joseluisgs.dev.services.cache
 
 import io.github.reactivecircus.cache4k.Cache
 import io.ktor.server.config.*
+import joseluisgs.dev.models.Racket
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -13,8 +14,8 @@ class CacheService(
 ) {
 
     // Configure the Cache with the options of every entity in the cache
-    val racketsCache by lazy {
-        Cache.Builder<Long, String>()
+    val rackets by lazy {
+        Cache.Builder<Long, Racket>()
             .expireAfterAccess(
                 (cacheConfig.property("cache.expireAfterAccess").getString().toLongOrNull())?.seconds ?: 86400.seconds
             )
