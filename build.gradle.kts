@@ -54,6 +54,9 @@ dependencies {
     // Server Status Pages
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
 
+    // WebSockets
+    implementation("io.ktor:ktor-server-websockets:$ktor_version")
+
     // Logging
     // implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("ch.qos.logback:logback-classic:$logbackclassic_version")

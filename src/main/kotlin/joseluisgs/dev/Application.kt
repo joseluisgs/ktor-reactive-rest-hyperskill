@@ -1,10 +1,7 @@
 package joseluisgs.dev
 
 import io.ktor.server.application.*
-import joseluisgs.dev.plugins.configureRouting
-import joseluisgs.dev.plugins.configureSerialization
-import joseluisgs.dev.plugins.configureStatusPages
-import joseluisgs.dev.plugins.configureValidation
+import joseluisgs.dev.plugins.*
 
 /**
  * Main function of our application
@@ -18,6 +15,7 @@ fun main(args: Array<String>): Unit =
  */
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
+    configureWebSockets() // Configure the websockets plugin
     configureSerialization() // Configure the serialization plugin
     configureRouting() // Configure the routing plugin
     configureValidation() // Configure the validation plugin
