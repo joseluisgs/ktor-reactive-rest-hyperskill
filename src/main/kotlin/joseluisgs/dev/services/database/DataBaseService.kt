@@ -72,7 +72,7 @@ class DataBaseService(
 
     // Create tables if not exists
     private suspend fun createTables() = withContext(Dispatchers.IO) {
-        logger.debug { "Crating the tables..." }
+        logger.debug { "Creating the tables..." }
         launch {
             client createTableIfNotExists RacketTable
         }
@@ -88,7 +88,7 @@ class DataBaseService(
 
     // Init data
     private suspend fun initDataBaseData() = withContext(Dispatchers.IO) {
-        logger.debug { "saving rackets demo data..." }
+        logger.debug { "Saving rackets demo data..." }
         launch {
             racketsDemoData().forEach {
                 client insert it.value.copy(id = Racket.NEW_RACKET).toEntity()

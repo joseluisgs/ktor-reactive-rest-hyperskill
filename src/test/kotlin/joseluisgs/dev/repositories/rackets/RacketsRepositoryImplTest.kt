@@ -1,4 +1,4 @@
-package joseluisgs.dev.repositories.raquets
+package joseluisgs.dev.repositories.rackets
 
 import io.ktor.server.config.*
 import joseluisgs.dev.data.racketsDemoData
@@ -108,7 +108,7 @@ class RacketsRepositoryImplTest {
         val newRaquet = repository.save(racket)
 
         val deleted = repository.delete(newRaquet)
-        val exists = repository.findById(newRaquet.id!!)
+        val exists = repository.findById(newRaquet.id)
         assertAll(
             { assertEquals("Test Brand", deleted.brand) },
             { assertEquals("Test Model", deleted.model) },

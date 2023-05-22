@@ -1,4 +1,4 @@
-package joseluisgs.dev.repositories.raquets
+package joseluisgs.dev.repositories.rackets
 
 import joseluisgs.dev.entities.RacketTable
 import joseluisgs.dev.mappers.toEntity

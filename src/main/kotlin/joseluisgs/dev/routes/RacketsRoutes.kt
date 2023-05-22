@@ -8,8 +8,8 @@ import io.ktor.server.routing.*
 import joseluisgs.dev.dto.RacketRequest
 import joseluisgs.dev.mappers.toModel
 import joseluisgs.dev.mappers.toResponse
-import joseluisgs.dev.repositories.raquets.RacketsRepository
-import joseluisgs.dev.repositories.raquets.RacketsRepositoryImpl
+import joseluisgs.dev.repositories.rackets.RacketsRepository
+import joseluisgs.dev.repositories.rackets.RacketsRepositoryImpl
 import joseluisgs.dev.services.database.DataBaseService
 import kotlinx.coroutines.flow.toList
 import mu.KotlinLogging

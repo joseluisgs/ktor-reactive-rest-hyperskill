@@ -1,4 +1,4 @@
-package joseluisgs.dev.repositories.raquets
+package joseluisgs.dev.repositories.rackets
 
 import joseluisgs.dev.models.Racket
 import joseluisgs.dev.repositories.base.CrudRepository
