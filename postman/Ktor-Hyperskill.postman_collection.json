@@ -87,6 +87,31 @@
 			"response": []
 		},
 		{
+			"name": "GET BY ID BRAND",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://0.0.0.0:8080/api/rackets/brand/babolat",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"rackets",
+						"brand",
+						"babolat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "POST",
 			"request": {
 				"method": "POST",

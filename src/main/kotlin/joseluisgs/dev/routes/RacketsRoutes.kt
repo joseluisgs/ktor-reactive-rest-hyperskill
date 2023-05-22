@@ -1,16 +1,21 @@
 package joseluisgs.dev.routes
 
+import com.github.michaelbull.result.mapBoth
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.pipeline.*
 import joseluisgs.dev.dto.RacketRequest
+import joseluisgs.dev.errors.racket.RacketError
 import joseluisgs.dev.mappers.toModel
 import joseluisgs.dev.mappers.toResponse
-import joseluisgs.dev.repositories.rackets.RacketsRepository
 import joseluisgs.dev.repositories.rackets.RacketsRepositoryImpl
+import joseluisgs.dev.services.cache.CacheService
 import joseluisgs.dev.services.database.DataBaseService
+import joseluisgs.dev.services.rackets.RacketsService
+import joseluisgs.dev.services.rackets.RacketsServiceImpl
 import kotlinx.coroutines.flow.toList
 import mu.KotlinLogging
 
@@ -26,10 +31,11 @@ private const val ENDPOINT = "api/rackets"
 
 fun Application.racketsRoutes() {
 
-    // Repository
-    val racquets: RacketsRepository = RacketsRepositoryImpl(
+    // Rackets Services with Repository and Cache
+    val racketsService: RacketsService = RacketsServiceImpl(
         // We pass the configuration from environment or default parameter value
-        DataBaseService(environment.config)
+        RacketsRepositoryImpl(DataBaseService(environment.config)),
+        CacheService(environment.config)
     )
 
     // Define routing based on endpoint
@@ -46,13 +52,13 @@ fun Application.racketsRoutes() {
                 if (page != null && page > 0) {
                     logger.debug { "GET ALL /$ENDPOINT?page=$page&perPage=$perPage" }
 
-                    racquets.findAllPageable(page - 1, perPage)
+                    racketsService.findAllPageable(page - 1, perPage)
                         .toList()
                         .run { call.respond(HttpStatusCode.OK, this.toResponse()) }
                 } else {
                     logger.debug { "GET ALL /$ENDPOINT" }
 
-                    racquets.findAll()
+                    racketsService.findAll()
                         .toList()
                         .run { call.respond(HttpStatusCode.OK, this.toResponse()) }
                 }
@@ -64,9 +70,10 @@ fun Application.racketsRoutes() {
 
                 val id = call.parameters["id"]?.toLongOrNull()
                 id?.let {
-                    racquets.findById(it)
-                        ?.run { call.respond(HttpStatusCode.OK, this.toResponse()) }
-                        ?: call.respond(HttpStatusCode.NotFound, "Racket not found with ID $id")
+                    racketsService.findById(id).mapBoth(
+                        success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
+                        failure = { handleRacketsErrors(it) }
+                    )
                 } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
             }
 
@@ -76,7 +83,7 @@ fun Application.racketsRoutes() {
 
                 val brand = call.parameters["brand"]
                 brand?.let {
-                    racquets.findByBrand(it)
+                    racketsService.findByBrand(it)
                         .toList()
                         .run { call.respond(HttpStatusCode.OK, this.toResponse()) }
                 } ?: call.respond(HttpStatusCode.BadRequest, "Brand is not a string")
@@ -87,8 +94,10 @@ fun Application.racketsRoutes() {
                 logger.debug { "POST /$ENDPOINT" }
 
                 val racketRequest = call.receive<RacketRequest>().toModel()
-                racquets.save(racketRequest)
-                    .run { call.respond(HttpStatusCode.Created, this.toResponse()) }
+                racketsService.save(racketRequest).mapBoth(
+                    success = { call.respond(HttpStatusCode.Created, it.toResponse()) },
+                    failure = { handleRacketsErrors(it) }
+                )
             }
 
             // Update a racquet --> PUT /api/rackets/{id}
@@ -97,12 +106,11 @@ fun Application.racketsRoutes() {
 
                 val id = call.parameters["id"]?.toLongOrNull()
                 id?.let {
-                    val racquet = call.receive<RacketRequest>().toModel()
-                    // exists?
-                    racquets.findById(id)?.let {
-                        racquets.save(racquet.copy(id = id))
-                            .run { call.respond(HttpStatusCode.OK, this.toResponse()) }
-                    } ?: call.respond(HttpStatusCode.NotFound, "Racket not found with ID $id")
+                    val racket = call.receive<RacketRequest>().toModel()
+                    racketsService.update(id, racket).mapBoth(
+                        success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
+                        failure = { handleRacketsErrors(it) }
+                    )
                 } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
             }
 
@@ -112,13 +120,22 @@ fun Application.racketsRoutes() {
 
                 val id = call.parameters["id"]?.toLongOrNull()
                 id?.let {
-                    // exists?
-                    racquets.findById(id)?.let { racquet ->
-                        racquets.delete(racquet)
-                            .run { call.respond(HttpStatusCode.NoContent) }
-                    } ?: call.respond(HttpStatusCode.NotFound, "Racket not found with ID $id")
+                    racketsService.delete(id).mapBoth(
+                        success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
+                        failure = { handleRacketsErrors(it) }
+                    )
                 } ?: call.respond(HttpStatusCode.BadRequest, "ID is not a number")
             }
         }
+    }
+}
+
+// Error handling for our API based on the error type and message
+private suspend fun PipelineContext<Unit, ApplicationCall>.handleRacketsErrors(
+    error: RacketError,
+) {
+    when (error) {
+        is RacketError.NotFound -> call.respond(HttpStatusCode.NotFound, error.message)
+        is RacketError.BadRequest -> call.respond(HttpStatusCode.BadRequest, error.message)
     }
 }
