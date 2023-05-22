@@ -24,8 +24,9 @@ This tutorials have been made to learn how to create a reactive service with a R
 You can find the following tutorials in the [Hyperskill Medium blog](https://medium.com/hyperskill).
 
 - [Part I: Set-up and your first end-point](https://medium.com/hyperskill/creating-your-reactive-rest-api-with-kotlin-and-ktor-part-i-f217be55c0bf)
+- [Part II: Reactive Database, DTOs, Validation and Test](#)
 
-You can also follow us on social media to stay up-to-date with our latest articles and projects. We are on [Reddit](https://www.reddit.com/r/Hyperskill/), [LinkedIn](https://www.linkedin.com/company/hyperskill/), and [Facebook](https://www.facebook.com/myhyperskill).
+You can also follow us on social media to stay up-to-date with our latest articles and projects. We are on [Reddit](https://www.reddit.com/r/Hyperskill/), [LinkedIn](https://www.linkedin.com/company/hyperskill/), [Twitter](https://twitter.com/yourhyperskill) and [Facebook](https://www.facebook.com/myhyperskill).
 
 ![image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*6sqcDNSinKG2uQb7UrJB7A.png)
 
@@ -34,6 +35,7 @@ You can find the following parts of the tutorial in the following repository: [K
 
 In this repository you can find the following parts of the tutorial in each commit and the end result in the last commit and tag:
 - [Part I: Set-up and your first end-point](https://github.com/joseluisgs/ktor-reactive-rest-hyperskill/releases/tag/0.0.1)
+- [Part II: Reactive Database, DTOs, Validation and Test](https://github.com/joseluisgs/ktor-reactive-rest-hyperskill/releases/tag/0.0.2)
 
  ## Author
  Coded with :sparkling_heart: by [José Luis González Sánchez](https://twitter.com/joseluisgonsan). Member of the Kotlin Team in Hyperskill.
