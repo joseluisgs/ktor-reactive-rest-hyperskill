@@ -34,3 +34,10 @@ data class RacketResponse(
     val updatedAt: String,
     val isDeleted: Boolean = false
 )
+
+@Serializable
+data class RacketPage(
+    val page: Int,
+    val perPage: Int,
+    val data: List<RacketResponse>
+)

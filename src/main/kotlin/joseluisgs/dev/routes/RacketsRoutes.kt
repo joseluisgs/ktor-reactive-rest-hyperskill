@@ -9,6 +9,7 @@ import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.util.pipeline.*
 import io.ktor.websocket.*
+import joseluisgs.dev.dto.RacketPage
 import joseluisgs.dev.dto.RacketRequest
 import joseluisgs.dev.errors.racket.RacketError
 import joseluisgs.dev.mappers.toModel
@@ -47,17 +48,20 @@ fun Application.racketsRoutes() {
             // Get all racquets --> GET /api/rackets
             get {
 
-                // QueryParams ??
-                val page = call.request.queryParameters["page"]?.toIntOrNull()
-                val perPage = call.request.queryParameters["perPage"]?.toIntOrNull() ?: 10
+                // QueryParams: rackets?page=1&perPage=10
+                call.request.queryParameters["page"]?.toIntOrNull()?.let {
+                    val page = if (it > 0) it else 0
+                    val perPage = call.request.queryParameters["perPage"]?.toIntOrNull() ?: 10
 
-                if (page != null && page > 0) {
                     logger.debug { "GET ALL /$ENDPOINT?page=$page&perPage=$perPage" }
 
-                    racketsService.findAllPageable(page - 1, perPage)
+                    racketsService.findAllPageable(page, perPage)
                         .toList()
-                        .run { call.respond(HttpStatusCode.OK, this.toResponse()) }
-                } else {
+                        .run {
+                            call.respond(HttpStatusCode.OK, RacketPage(page, perPage, this.toResponse()))
+                        }
+
+                } ?: run {
                     logger.debug { "GET ALL /$ENDPOINT" }
 
                     racketsService.findAll()
