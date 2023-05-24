@@ -106,47 +106,7 @@ class RacketsServiceImpl(
     }
 
     // Real Time Notifications and WebSockets
-    // Observable Pattern with WebSockets and Subscribers
-    // private val subscribers = mutableMapOf<Int, suspend (RacketNotification) -> Unit>()
-
-
-    // Add and remove suscribes
-    /*override fun addSubscriber(id: Int, subscriber: suspend (RacketNotification) -> Unit) {
-        logger.debug { "addSubscriber: add subscriber with ws id: $id" }
-
-        // Añadimos el suscriptor, que es la función que se ejecutará
-        subscribers[id] = subscriber
-    }*/
-
-    /*override fun removeSubscriber(id: Int) {
-        logger.debug { "removeSubscriber: remove subscriber with ws id $id" }
-
-        subscribers.remove(id)
-    }*/
-
-    // Solution A, traditional way in observable pattern
-    // Event when a change is produced
-    /* private suspend fun onChange(type: NotificationType, id: Long, data: Racket) {
-        logger.debug { "onChange: Notification on Rackets: $type, notification updates to subscribers: $data" }
-
-        // We notify all subscribers of the change using coroutines to avoid blocking
-        CoroutineScope(Dispatchers.IO).launch {
-            subscribers.values.forEach {
-                // We invoke the function of the subscriber
-                it.invoke(
-                    RacketNotification(
-                        entity = "RACKET",
-                        type = type,
-                        id = id,
-                        data = data.toResponse()
-                    )
-                )
-            }
-        }
-    }*/
-
-    // Solution B, reactive way in observable pattern
-    // We can change it to use a reactive system with StateFlow
+    // We can notify use a reactive system with StateFlow
     private val _notificationState: MutableStateFlow<RacketNotification> = MutableStateFlow(
         RacketNotification(
             entity = "",
@@ -155,43 +115,18 @@ class RacketsServiceImpl(
             data = null
         )
     )
+    override val notificationState: StateFlow<RacketNotification> = _notificationState
 
     private suspend fun onChange(type: NotificationType, id: Long, data: Racket) {
         logger.debug { "onChange: Notification on Rackets: $type, notification updates to subscribers: $data" }
 
         // We notify all subscribers of the change using coroutines to avoid blocking
-        _notificationState.emit(
-            RacketNotification(
-                entity = "RACKET",
-                type = type,
-                id = id,
-                data = data.toResponse()
-            )
+        _notificationState.value = RacketNotification(
+            entity = "RACKET",
+            type = type,
+            id = id,
+            data = data.toResponse()
         )
+
     }
-
-    // Now and the init, we react to changes in notifications state and notify to subscribers.
-    // we use launch to avoid blocking
-    /*init {
-        // We notify all subscribers of the change using coroutines to avoid blocking
-        CoroutineScope(Dispatchers.IO).launch {
-            notificationState.onStart {
-                logger.debug { "notificationState: onStart" } // We can use this to log
-            }.filter {
-                it.entity.isNotEmpty() // We filter only Rackets that you want or we can use special type of notification
-            }.collect {
-                logger.debug { "notificationState: collect $it" }
-                subscribers.values.forEach { subscriber ->
-                    // We invoke the function of the subscriber
-                    subscriber.invoke(it)
-                }
-            }
-        }
-    }*/
-
-    // The problem is the list is to big and we can change a lot
-
-    // Solution C, reactive way in observable pattern and suscribe every cliente in service!!!
-    override val notificationState: StateFlow<RacketNotification> = _notificationState
-
 }

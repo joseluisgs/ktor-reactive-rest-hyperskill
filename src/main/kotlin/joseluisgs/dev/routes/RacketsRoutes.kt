@@ -8,7 +8,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.util.pipeline.*
-import io.ktor.websocket.*
 import joseluisgs.dev.dto.RacketPage
 import joseluisgs.dev.dto.RacketRequest
 import joseluisgs.dev.errors.racket.RacketError
@@ -23,6 +22,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.toList
 import mu.KotlinLogging
+import java.time.LocalDateTime
 
 private val logger = KotlinLogging.logger {}
 
@@ -137,40 +137,24 @@ fun Application.racketsRoutes() {
 
         // WebSockets Real Time Updates and Notifications
         webSocket("/$ENDPOINT/notifications") {
-            //try {
-            // Observer Pattern. Subscribe to the service with a hashcode
-            // and a function to send the message to the client
-            /*racketsService.addSubscriber(this.hashCode()) {
-                sendSerialized(it) // WS function to send the message to the client
-            }*/
 
-            // solution C, Notification state and react to changes
             sendSerialized("Notifications WS: Rackets - Rackets API")
-
+            val initTime = LocalDateTime.now()
+            // Remeber it will autoclose the connection, see config
+            // Now we can listen and react to the changes in the StateFlow
             racketsService.notificationState
+                // Sometimes we need to do something when we start
                 .onStart {
-                    logger.debug { "notificationState: onStart to ${this.hashCode()}" } // We can use this to log
+                    logger.debug { "notificationState: onStart to ${this.hashCode()}" }
+                    // Sometimes we need to filter any values
                 }.filter {
-                    it.entity.isNotEmpty() // We filter only Rackets that you want or we can use special type of notification
+                    // we filter the values: we only send the ones that are not empty and are after the init time
+                    it.entity.isNotEmpty() && it.createdAt.isAfter(initTime)
+                    // we collect the values and send them to the client
                 }.collect {
                     logger.debug { "notificationState: collect $it and sent to ${this.hashCode()}" }
                     sendSerialized(it) // WS function to send the message to the client
                 }
-
-
-            // Every time we receive a WS message we ignore it
-            for (frame in incoming) {
-                if (frame.frameType == FrameType.CLOSE) {
-                    break
-                } else {
-                    // We can use this to log or do something for each message received
-                    logger.debug { "WS: Rackets - Rackets API: $frame" }
-                }
-            }
-            /*} finally {
-                // When we close the WS connection we unsubscribe from the service
-                //racketsService.removeSubscriber(this.hashCode())
-            }*/
         }
     }
 }
