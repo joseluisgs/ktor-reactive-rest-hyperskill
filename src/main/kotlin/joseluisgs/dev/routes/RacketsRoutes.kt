@@ -19,6 +19,8 @@ import joseluisgs.dev.services.cache.CacheService
 import joseluisgs.dev.services.database.DataBaseService
 import joseluisgs.dev.services.rackets.RacketsService
 import joseluisgs.dev.services.rackets.RacketsServiceImpl
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.toList
 import mu.KotlinLogging
 
@@ -135,22 +137,40 @@ fun Application.racketsRoutes() {
 
         // WebSockets Real Time Updates and Notifications
         webSocket("/$ENDPOINT/notifications") {
-            try {
-                // Observer Pattern. Subscribe to the service with a hashcode
-                // and a function to send the message to the client
-                racketsService.addSubscriber(this.hashCode()) {
+            //try {
+            // Observer Pattern. Subscribe to the service with a hashcode
+            // and a function to send the message to the client
+            /*racketsService.addSubscriber(this.hashCode()) {
+                sendSerialized(it) // WS function to send the message to the client
+            }*/
+
+            // solution C, Notification state and react to changes
+            sendSerialized("Notifications WS: Rackets - Rackets API")
+
+            racketsService.notificationState
+                .onStart {
+                    logger.debug { "notificationState: onStart to ${this.hashCode()}" } // We can use this to log
+                }.filter {
+                    it.entity.isNotEmpty() // We filter only Rackets that you want or we can use special type of notification
+                }.collect {
+                    logger.debug { "notificationState: collect $it and sent to ${this.hashCode()}" }
                     sendSerialized(it) // WS function to send the message to the client
                 }
-                sendSerialized("Notifications WS: Rackets - Rackets API")
-                // Every time we receive a WS message we ignore it
-                for (frame in incoming) {
-                    if (frame.frameType == FrameType.CLOSE) {
-                        break
-                    }
+
+
+            // Every time we receive a WS message we ignore it
+            for (frame in incoming) {
+                if (frame.frameType == FrameType.CLOSE) {
+                    break
+                } else {
+                    // We can use this to log or do something for each message received
+                    logger.debug { "WS: Rackets - Rackets API: $frame" }
                 }
-            } finally {
-                racketsService.removeSubscriber(this.hashCode())
             }
+            /*} finally {
+                // When we close the WS connection we unsubscribe from the service
+                //racketsService.removeSubscriber(this.hashCode())
+            }*/
         }
     }
 }

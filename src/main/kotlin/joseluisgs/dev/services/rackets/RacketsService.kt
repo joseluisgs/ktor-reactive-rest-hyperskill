@@ -5,6 +5,7 @@ import joseluisgs.dev.dto.RacketNotification
 import joseluisgs.dev.errors.racket.RacketError
 import joseluisgs.dev.models.Racket
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Rackets Service to our Rackets
@@ -20,6 +21,8 @@ interface RacketsService {
     suspend fun delete(id: Long): Result<Racket, RacketError>
 
     // Real time with WebSockets. Subscribe and unsubscribe to notifications
-    fun addSubscriber(id: Int, subscriber: suspend (RacketNotification) -> Unit)
-    fun removeSubscriber(id: Int)
+    // See solution C
+    // fun addSubscriber(id: Int, subscriber: suspend (RacketNotification) -> Unit)
+    // fun removeSubscriber(id: Int)
+    val notificationState: StateFlow<RacketNotification>
 }
