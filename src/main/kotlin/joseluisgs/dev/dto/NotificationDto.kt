@@ -13,12 +13,12 @@ import java.time.LocalDateTime
 data class NotificacionDto<T>(
     val entity: String,
     val type: NotificationType,
-    val id: Long,
-    val data: T,
+    val id: Long?,
+    val data: T?,
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
-    enum class NotificationType { CREATE, UPDATE, DELETE }
+    enum class NotificationType { CREATE, UPDATE, DELETE, OTHER }
 }
 
 // My notifications types

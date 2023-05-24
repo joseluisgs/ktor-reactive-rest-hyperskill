@@ -14,6 +14,9 @@ import joseluisgs.dev.services.cache.CacheService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import kotlin.collections.set
@@ -111,6 +114,7 @@ class RacketsServiceImpl(
     // Observable Pattern with WebSockets and Subscribers
     private val subscribers = mutableMapOf<Int, suspend (RacketNotification) -> Unit>()
 
+
     // Add and remove suscribes
     override fun addSubscriber(id: Int, subscriber: suspend (RacketNotification) -> Unit) {
         logger.debug { "addSubscriber: add subscriber with ws id: $id" }
@@ -125,8 +129,9 @@ class RacketsServiceImpl(
         subscribers.remove(id)
     }
 
+    // Solution A, traditional way in observable pattern
     // Event when a change is produced
-    private suspend fun onChange(type: NotificationType, id: Long, data: Racket) {
+    /* private suspend fun onChange(type: NotificationType, id: Long, data: Racket) {
         logger.debug { "onChange: Notification on Rackets: $type, notification updates to subscribers: $data" }
 
         // We notify all subscribers of the change using coroutines to avoid blocking
@@ -143,5 +148,50 @@ class RacketsServiceImpl(
                 )
             }
         }
+    }*/
+
+    // Solution B, reactive way in observable pattern
+    // We can change it to use a reactive system with StateFlow
+    private val notificationState: MutableStateFlow<RacketNotification> = MutableStateFlow(
+        RacketNotification(
+            entity = "",
+            type = NotificationType.OTHER,
+            id = null,
+            data = null
+        )
+    )
+
+    private suspend fun onChange(type: NotificationType, id: Long, data: Racket) {
+        logger.debug { "onChange: Notification on Rackets: $type, notification updates to subscribers: $data" }
+
+        // We notify all subscribers of the change using coroutines to avoid blocking
+        notificationState.emit(
+            RacketNotification(
+                entity = "RACKET",
+                type = type,
+                id = id,
+                data = data.toResponse()
+            )
+        )
     }
+
+    // Now and the init, we react to changes in notifications state and notify to subscribers.
+    // we use launch to avoid blocking
+    init {
+        // We notify all subscribers of the change using coroutines to avoid blocking
+        CoroutineScope(Dispatchers.IO).launch {
+            notificationState.onStart {
+                logger.debug { "notificationState: onStart" } // We can use this to log
+            }.filter {
+                it.entity.isNotEmpty() // We filter only Rackets that you want or we can use special type of notification
+            }.collect {
+                logger.debug { "notificationState: collect $it" }
+                subscribers.values.forEach { subscriber ->
+                    // We invoke the function of the subscriber
+                    subscriber.invoke(it)
+                }
+            }
+        }
+    }
+
 }
