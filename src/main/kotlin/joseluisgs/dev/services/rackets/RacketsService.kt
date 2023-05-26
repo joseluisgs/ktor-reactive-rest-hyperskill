@@ -19,10 +19,8 @@ interface RacketsService {
     suspend fun save(racket: Racket): Result<Racket, RacketError>
     suspend fun update(id: Long, racket: Racket): Result<Racket, RacketError>
     suspend fun delete(id: Long): Result<Racket, RacketError>
+    suspend fun updateImage(id: Long, image: String): Result<Racket, RacketError>
 
-    // Real time with WebSockets. Subscribe and unsubscribe to notifications
-    // See solution C
-    // fun addSubscriber(id: Int, subscriber: suspend (RacketNotification) -> Unit)
-    // fun removeSubscriber(id: Int)
+    // Notifictions state
     val notificationState: StateFlow<RacketNotification>
 }

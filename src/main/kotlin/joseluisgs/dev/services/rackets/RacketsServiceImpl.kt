@@ -105,6 +105,23 @@ class RacketsServiceImpl(
         }
     }
 
+    override suspend fun updateImage(id: Long, image: String): Result<Racket, RacketError> {
+        logger.debug { "updateImage: update image racket" }
+
+        // find, if exists update in cache and repository and notify
+        return findById(id).andThen {
+            // Copy the new values over the existing values. Return OK if the racket was updated in the database and cache
+            Ok(racketsRepository.save(
+                it.copy(
+                    image = image
+                )
+            ).also { res ->
+                cacheService.rackets.put(id, res)
+                onChange(NotificationType.UPDATE, id, res)
+            })
+        }
+    }
+
     // Real Time Notifications and WebSockets
     // We can notify use a reactive system with StateFlow
     private val _notificationState: MutableStateFlow<RacketNotification> = MutableStateFlow(
@@ -119,8 +136,7 @@ class RacketsServiceImpl(
 
     private suspend fun onChange(type: NotificationType, id: Long, data: Racket) {
         logger.debug { "onChange: Notification on Rackets: $type, notification updates to subscribers: $data" }
-
-        // We notify all subscribers of the change using coroutines to avoid blocking
+        // update notification state
         _notificationState.value = RacketNotification(
             entity = "RACKET",
             type = type,

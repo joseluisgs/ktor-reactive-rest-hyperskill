@@ -2,7 +2,9 @@ package joseluisgs.dev.routes
 
 import com.github.michaelbull.result.mapBoth
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -18,6 +20,8 @@ import joseluisgs.dev.services.cache.CacheService
 import joseluisgs.dev.services.database.DataBaseService
 import joseluisgs.dev.services.rackets.RacketsService
 import joseluisgs.dev.services.rackets.RacketsServiceImpl
+import joseluisgs.dev.services.storage.StorageService
+import joseluisgs.dev.services.storage.StorageServiceImpl
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.toList
@@ -40,14 +44,17 @@ fun Application.racketsRoutes() {
     val racketsService: RacketsService = RacketsServiceImpl(
         // We pass the configuration from environment or default parameter value
         RacketsRepositoryImpl(DataBaseService(environment.config)),
-        CacheService(environment.config)
+        CacheService(environment.config),
     )
+
+    // Storage Service
+    val storageService: StorageService = StorageServiceImpl(environment.config)
 
     // Define routing based on endpoint
     routing {
         route("/$ENDPOINT") {
 
-            // Get all racquets --> GET /api/rackets
+            // Get all racket --> GET /api/rackets
             get {
 
                 // QueryParams: rackets?page=1&perPage=10
@@ -72,7 +79,7 @@ fun Application.racketsRoutes() {
                 }
             }
 
-            // Get one racquet by id --> GET /api/rackets/{id}
+            // Get one racket by id --> GET /api/rackets/{id}
             get("{id}") {
                 logger.debug { "GET BY ID /$ENDPOINT/{id}" }
 
@@ -84,7 +91,7 @@ fun Application.racketsRoutes() {
                 }
             }
 
-            // Get one racquet by brand --> GET /api/rackets/brand/{brand}
+            // Get one racket by brand --> GET /api/rackets/brand/{brand}
             get("brand/{brand}") {
                 logger.debug { "GET BY BRAND /$ENDPOINT/brand/{brand}" }
 
@@ -95,7 +102,7 @@ fun Application.racketsRoutes() {
                 }
             }
 
-            // Create a new racquet --> POST /api/rackets
+            // Create a new racket --> POST /api/rackets
             post {
                 logger.debug { "POST /$ENDPOINT" }
 
@@ -107,7 +114,7 @@ fun Application.racketsRoutes() {
                 )
             }
 
-            // Update a racquet --> PUT /api/rackets/{id}
+            // Update a racket --> PUT /api/rackets/{id}
             put("{id}") {
                 logger.debug { "PUT /$ENDPOINT/{id}" }
 
@@ -122,7 +129,38 @@ fun Application.racketsRoutes() {
                 }
             }
 
-            // Delete a racquet --> DELETE /api/rackets/{id}
+            // Update a racket image --> PATCH /api/rackets/{id}
+            patch("{id}") {
+                logger.debug { "PATCH /$ENDPOINT/{id}" }
+
+                call.parameters["id"]?.toLong()?.let { id ->
+                    val baseUrl =
+                        call.request.origin.scheme + "://" + call.request.host() + ":" + call.request.port() + "/$ENDPOINT/image/"
+                    val multipartData = call.receiveMultipart()
+                    multipartData.forEachPart { part ->
+                        if (part is PartData.FileItem) {
+                            val fileName = part.originalFileName as String
+                            val fileBytes = part.streamProvider().readBytes()
+                            val fileExtension = fileName.substringAfterLast(".")
+                            val newFileName = "$id.$fileExtension"
+                            val newFileUrl = "$baseUrl$newFileName"
+                            // Save the file
+                            storageService.saveFile(newFileName, newFileUrl, fileBytes)
+                            // Update the racket Image
+                            racketsService.updateImage(
+                                id = id,
+                                image = newFileUrl
+                            ).mapBoth(
+                                success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
+                                failure = { handleRacketErrors(it) }
+                            )
+                        }
+                        part.dispose()
+                    }
+                }
+            }
+
+            // Delete a racket --> DELETE /api/rackets/{id}
             delete("{id}") {
                 logger.debug { "DELETE /$ENDPOINT/{id}" }
 
