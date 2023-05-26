@@ -20,4 +20,5 @@ fun Application.module() {
     configureRouting() // Configure the routing plugin
     configureValidation() // Configure the validation plugin
     configureStatusPages() // Configure the status pages plugin
+    configureCompression() // Configure the compression plugin
 }

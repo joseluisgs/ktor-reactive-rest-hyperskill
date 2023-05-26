@@ -58,6 +58,9 @@ dependencies {
     // WebSockets
     implementation("io.ktor:ktor-server-websockets:$ktor_version")
 
+    // Compression
+    implementation("io.ktor:ktor-server-compression:$ktor_version")
+
     // Logging
     // implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("ch.qos.logback:logback-classic:$logbackclassic_version")
