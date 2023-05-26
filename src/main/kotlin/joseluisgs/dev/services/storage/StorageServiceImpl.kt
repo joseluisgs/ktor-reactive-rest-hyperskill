@@ -5,7 +5,7 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import io.ktor.server.config.*
-import joseluisgs.dev.errors.racket.StorageError
+import joseluisgs.dev.errors.storage.StorageError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
@@ -72,11 +72,8 @@ class StorageServiceImpl(
 
     override suspend fun deleteFile(fileName: String): Result<String, StorageError> = withContext(Dispatchers.IO) {
         logger.debug { "Remove file: $fileName" }
-        return@withContext if (Files.deleteIfExists(Path.of("${uploadDir}/$fileName"))) {
-            Ok(fileName)
-        } else {
-            Err(StorageError.NotFound("File Not Found in storage: $fileName"))
-        }
+        Files.deleteIfExists(Path.of("${uploadDir}/$fileName"))
+        Ok(fileName)
     }
 
 }

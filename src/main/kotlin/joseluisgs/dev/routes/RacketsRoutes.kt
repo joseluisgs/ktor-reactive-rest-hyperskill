@@ -14,7 +14,7 @@ import io.ktor.util.pipeline.*
 import joseluisgs.dev.dto.RacketPage
 import joseluisgs.dev.dto.RacketRequest
 import joseluisgs.dev.errors.racket.RacketError
-import joseluisgs.dev.errors.racket.StorageError
+import joseluisgs.dev.errors.storage.StorageError
 import joseluisgs.dev.mappers.toModel
 import joseluisgs.dev.mappers.toResponse
 import joseluisgs.dev.repositories.rackets.RacketsRepositoryImpl
@@ -33,9 +33,9 @@ import java.time.LocalDateTime
 private val logger = KotlinLogging.logger {}
 
 /**
- * Racquets routes for our API
+ * Rackets routes for our API
  * We define the routes for our API based on the endpoint
- * to manage the racquets
+ * to manage the rackets
  * We use the repository to manage the data to perform the CRUD operations
  */
 private const val ENDPOINT = "api/rackets"

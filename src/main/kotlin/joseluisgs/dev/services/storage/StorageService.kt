@@ -1,7 +1,7 @@
 package joseluisgs.dev.services.storage
 
 import com.github.michaelbull.result.Result
-import joseluisgs.dev.errors.racket.StorageError
+import joseluisgs.dev.errors.storage.StorageError
 import java.io.File
 
 interface StorageService {

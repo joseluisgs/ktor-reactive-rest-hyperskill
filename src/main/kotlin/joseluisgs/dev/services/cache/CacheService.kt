@@ -12,7 +12,6 @@ import kotlin.time.Duration.Companion.seconds
 class CacheService(
     private val cacheConfig: ApplicationConfig = ApplicationConfig("application.conf")
 ) {
-
     // Configure the Cache with the options of every entity in the cache
     val rackets by lazy {
         Cache.Builder<Long, Racket>()

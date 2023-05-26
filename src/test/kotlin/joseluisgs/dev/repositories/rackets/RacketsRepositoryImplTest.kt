@@ -105,10 +105,10 @@ class RacketsRepositoryImplTest {
     fun delete() = runTest {
         // Save a new racket
         val racket = Racket(brand = "Test Brand", model = "Test Model", price = 100.0)
-        val newRaquet = repository.save(racket)
+        val newRacket = repository.save(racket)
 
-        val deleted = repository.delete(newRaquet)
-        val exists = repository.findById(newRaquet.id)
+        val deleted = repository.delete(newRacket)
+        val exists = repository.findById(newRacket.id)
         assertAll(
             { assertEquals("Test Brand", deleted.brand) },
             { assertEquals("Test Model", deleted.model) },

@@ -143,6 +143,5 @@ class RacketsServiceImpl(
             id = id,
             data = data.toResponse()
         )
-
     }
 }
