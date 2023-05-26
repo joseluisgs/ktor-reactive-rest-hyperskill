@@ -19,7 +19,6 @@ data class Racket(
 ) {
     companion object {
         val NEW_RACKET = -1L
-        const val DEFAULT_IMAGE =
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Tennis_Racket_and_Balls.jpg/800px-Tennis_Racket_and_Balls.jpg"
+        const val DEFAULT_IMAGE = "https://i.imgur.com/AsZ2xYS.jpg"
     }
 }
