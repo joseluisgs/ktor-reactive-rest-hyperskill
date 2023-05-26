@@ -1,8 +1,11 @@
 package joseluisgs.dev.services.storage
 
 
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import io.ktor.server.config.*
-import joseluisgs.dev.exceptions.StorageException
+import joseluisgs.dev.errors.racket.StorageError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
@@ -36,39 +39,43 @@ class StorageServiceImpl(
         }
     }
 
-    override suspend fun saveFile(fileName: String, fileUrl: String, fileBytes: ByteArray): Map<String, String> =
+    override suspend fun saveFile(
+        fileName: String,
+        fileUrl: String,
+        fileBytes: ByteArray
+    ): Result<Map<String, String>, StorageError> =
         withContext(Dispatchers.IO) {
             logger.debug { "Saving file in: $fileName" }
-            try {
+            return@withContext try {
                 File("${uploadDir}/$fileName").writeBytes(fileBytes)
-                return@withContext mapOf(
-                    "fileName" to fileName,
-                    "createdAt" to LocalDateTime.now().toString(),
-                    "size" to fileBytes.size.toString(),
-                    "url" to fileUrl,
+                Ok(
+                    mapOf(
+                        "fileName" to fileName,
+                        "createdAt" to LocalDateTime.now().toString(),
+                        "size" to fileBytes.size.toString(),
+                        "url" to fileUrl,
+                    )
                 )
             } catch (e: Exception) {
-                throw StorageException.FileNotFound("No: ${e.message}")
+                Err(StorageError.BadRequest("Error saving file: $fileName"))
             }
         }
 
-    override suspend fun getFile(fileName: String): File = withContext(Dispatchers.IO) {
+    override suspend fun getFile(fileName: String): Result<File, StorageError> = withContext(Dispatchers.IO) {
         logger.debug { "Get file: $fileName" }
-        val file = File("${uploadDir}/$fileName")
-        if (!file.exists()) {
-            throw StorageException.FileNotFound("File not found: $fileName")
+        return@withContext if (!File("${uploadDir}/$fileName").exists()) {
+            Err(StorageError.NotFound("File Not Found in storage: $fileName"))
         } else {
-            return@withContext file
+            Ok(File("${uploadDir}/$fileName"))
         }
     }
 
-    override suspend fun deleteFile(fileName: String): Unit = withContext(Dispatchers.IO) {
+    override suspend fun deleteFile(fileName: String): Result<String, StorageError> = withContext(Dispatchers.IO) {
         logger.debug { "Remove file: $fileName" }
-        val file = File("${uploadDir}/$fileName")
-        if (!file.exists()) {
-            throw StorageException.FileNotFound("File Not Found in storage: $fileName")
+        return@withContext if (Files.deleteIfExists(Path.of("${uploadDir}/$fileName"))) {
+            Ok(fileName)
         } else {
-            file.delete()
+            Err(StorageError.NotFound("File Not Found in storage: $fileName"))
         }
     }
 

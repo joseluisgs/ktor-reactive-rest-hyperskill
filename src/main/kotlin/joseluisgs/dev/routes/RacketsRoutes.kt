@@ -1,5 +1,6 @@
 package joseluisgs.dev.routes
 
+import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.mapBoth
 import io.ktor.http.*
 import io.ktor.http.content.*
@@ -13,6 +14,7 @@ import io.ktor.util.pipeline.*
 import joseluisgs.dev.dto.RacketPage
 import joseluisgs.dev.dto.RacketRequest
 import joseluisgs.dev.errors.racket.RacketError
+import joseluisgs.dev.errors.racket.StorageError
 import joseluisgs.dev.mappers.toModel
 import joseluisgs.dev.mappers.toResponse
 import joseluisgs.dev.repositories.rackets.RacketsRepositoryImpl
@@ -142,15 +144,16 @@ fun Application.racketsRoutes() {
                             val fileName = part.originalFileName as String
                             val fileBytes = part.streamProvider().readBytes()
                             val fileExtension = fileName.substringAfterLast(".")
-                            val newFileName = "$id.$fileExtension"
+                            val newFileName = "${System.currentTimeMillis()}.$fileExtension"
                             val newFileUrl = "$baseUrl$newFileName"
                             // Save the file
-                            storageService.saveFile(newFileName, newFileUrl, fileBytes)
-                            // Update the racket Image
-                            racketsService.updateImage(
-                                id = id,
-                                image = newFileUrl
-                            ).mapBoth(
+                            storageService.saveFile(newFileName, newFileUrl, fileBytes).andThen {
+                                // Update the racket Image
+                                racketsService.updateImage(
+                                    id = id,
+                                    image = newFileUrl
+                                )
+                            }.mapBoth(
                                 success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
                                 failure = { handleRacketErrors(it) }
                             )
@@ -165,8 +168,23 @@ fun Application.racketsRoutes() {
                 logger.debug { "DELETE /$ENDPOINT/{id}" }
 
                 call.parameters["id"]?.toLong()?.let { id ->
-                    racketsService.delete(id).mapBoth(
-                        success = { call.respond(HttpStatusCode.OK, it.toResponse()) },
+                    racketsService.delete(id).andThen {
+                        // get the racket image and delete it
+                        storageService.deleteFile(it.image.substringAfterLast("/"))
+                    }.mapBoth(
+                        success = { call.respond(HttpStatusCode.NoContent) },
+                        failure = { handleRacketErrors(it) }
+                    )
+                }
+            }
+
+            // Get racket image --> GET /api/rackets/image/{image}
+            get("image/{image}") {
+                logger.debug { "GET IMAGE /$ENDPOINT/image/{image}" }
+
+                call.parameters["image"]?.let { image ->
+                    storageService.getFile(image).mapBoth(
+                        success = { call.respondFile(it) },
                         failure = { handleRacketErrors(it) }
                     )
                 }
@@ -199,11 +217,15 @@ fun Application.racketsRoutes() {
 
 // Error handling for our API based on the error type and message
 private suspend fun PipelineContext<Unit, ApplicationCall>.handleRacketErrors(
-    error: RacketError,
+    error: Any,
 ) {
+    // We can handle the errors in a different way
     when (error) {
+        // Racket Errors
         is RacketError.NotFound -> call.respond(HttpStatusCode.NotFound, error.message)
         is RacketError.BadRequest -> call.respond(HttpStatusCode.BadRequest, error.message)
-        // We can add more errors here
+        // Storage Errors
+        is StorageError.BadRequest -> call.respond(HttpStatusCode.BadRequest, error.message)
+        is StorageError.NotFound -> call.respond(HttpStatusCode.NotFound, error.message)
     }
 }
