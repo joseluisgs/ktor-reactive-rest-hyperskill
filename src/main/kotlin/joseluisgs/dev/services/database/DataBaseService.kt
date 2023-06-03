@@ -1,8 +1,8 @@
 package joseluisgs.dev.services.database
 
-import io.ktor.server.config.*
 import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactoryOptions
+import joseluisgs.dev.config.AppConfig
 import joseluisgs.dev.data.racketsDemoData
 import joseluisgs.dev.entities.RacketTable
 import joseluisgs.dev.mappers.toEntity
@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
+import org.koin.core.annotation.Singleton
 import org.ufoss.kotysa.H2Tables
 import org.ufoss.kotysa.r2dbc.coSqlClient
 import org.ufoss.kotysa.tables
@@ -20,33 +21,35 @@ private val logger = KotlinLogging.logger {}
 
 /**
  * DataBase Service to connect to our database
- * @param dataBaseConfig Configuration of our database from application.conf
+ * @property myConfig AppConfig Configuration of our service
  */
+
+@Singleton
 class DataBaseService(
-    private val dataBaseConfig: ApplicationConfig = ApplicationConfig("application.conf")
+    private val myConfig: AppConfig,
 ) {
 
     private val connectionFactory by lazy {
         val options = ConnectionFactoryOptions.builder()
             .option(
                 ConnectionFactoryOptions.DRIVER,
-                dataBaseConfig.propertyOrNull("database.driver")?.getString() ?: "h2"
+                myConfig.applicationConfiguration.propertyOrNull("database.driver")?.getString() ?: "h2"
             )
             .option(
                 ConnectionFactoryOptions.PROTOCOL,
-                dataBaseConfig.propertyOrNull("database.protocol")?.getString() ?: "mem"
+                myConfig.applicationConfiguration.propertyOrNull("database.protocol")?.getString() ?: "mem"
             )
             .option(
                 ConnectionFactoryOptions.USER,
-                dataBaseConfig.propertyOrNull("database.user")?.getString() ?: "sa"
+                myConfig.applicationConfiguration.propertyOrNull("database.user")?.getString() ?: "sa"
             )
             .option(
                 ConnectionFactoryOptions.PASSWORD,
-                dataBaseConfig.propertyOrNull("database.password")?.getString() ?: ""
+                myConfig.applicationConfiguration.propertyOrNull("database.password")?.getString() ?: ""
             )
             .option(
                 ConnectionFactoryOptions.DATABASE,
-                dataBaseConfig.propertyOrNull("database.database")?.getString()
+                myConfig.applicationConfiguration.propertyOrNull("database.database")?.getString()
                     ?: "r2dbc:h2:mem:///test;DB_CLOSE_DELAY=-1"
             )
             .build()
@@ -54,7 +57,7 @@ class DataBaseService(
     }
 
     private val initDatabaseData by lazy {
-        dataBaseConfig.propertyOrNull("database.initDatabaseData")?.getString()?.toBoolean() ?: false
+        myConfig.applicationConfiguration.propertyOrNull("database.initDatabaseData")?.getString()?.toBoolean() ?: false
     }
 
     // Our client

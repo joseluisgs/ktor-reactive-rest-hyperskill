@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import mu.KotlinLogging
+import org.koin.core.annotation.Singleton
 
 private val logger = KotlinLogging.logger {}
 
@@ -24,6 +25,7 @@ private val logger = KotlinLogging.logger {}
  * @property racketsRepository RacketsRepository Repository of our Rackets
  * @property cacheService CacheService Cache Service to our Rackets
  */
+@Singleton
 class RacketsServiceImpl(
     private val racketsRepository: RacketsRepository,
     private val cacheService: CacheService

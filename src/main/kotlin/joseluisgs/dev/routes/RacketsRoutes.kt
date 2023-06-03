@@ -17,18 +17,15 @@ import joseluisgs.dev.errors.racket.RacketError
 import joseluisgs.dev.errors.storage.StorageError
 import joseluisgs.dev.mappers.toModel
 import joseluisgs.dev.mappers.toResponse
-import joseluisgs.dev.repositories.rackets.RacketsRepositoryImpl
-import joseluisgs.dev.services.cache.CacheService
-import joseluisgs.dev.services.database.DataBaseService
 import joseluisgs.dev.services.rackets.RacketsService
-import joseluisgs.dev.services.rackets.RacketsServiceImpl
 import joseluisgs.dev.services.storage.StorageService
-import joseluisgs.dev.services.storage.StorageServiceImpl
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.toList
 import mu.KotlinLogging
+import org.koin.ktor.ext.inject
 import java.time.LocalDateTime
+import org.koin.ktor.ext.get as koinGet
 
 private val logger = KotlinLogging.logger {}
 
@@ -42,15 +39,13 @@ private const val ENDPOINT = "api/rackets"
 
 fun Application.racketsRoutes() {
 
-    // Rackets Services with Repository and Cache
-    val racketsService: RacketsService = RacketsServiceImpl(
-        // We pass the configuration from environment or default parameter value
-        RacketsRepositoryImpl(DataBaseService(environment.config)),
-        CacheService(environment.config),
-    )
-
-    // Storage Service
-    val storageService: StorageService = StorageServiceImpl(environment.config)
+    // Dependency injection by Koin
+    // Rackets Services with dependency injection by Koin lazy-loading
+    //val racketsService: RacketsService by inject()
+    // We can also use Koin get() no lazy-loading, we use a alias to avoid conflicts with Ktor get()
+    val racketsService: RacketsService = koinGet()
+    // Storage Service with dependency injection by Koin lazy-loading (we use it for images)
+    val storageService: StorageService by inject()
 
     // Define routing based on endpoint
     routing {

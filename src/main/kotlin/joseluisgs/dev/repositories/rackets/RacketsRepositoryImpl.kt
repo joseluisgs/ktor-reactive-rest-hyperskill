@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
+import org.koin.core.annotation.Singleton
 import java.time.LocalDateTime
 
 private val logger = KotlinLogging.logger {}
@@ -18,6 +19,8 @@ private val logger = KotlinLogging.logger {}
 /**
  * Repository of Racquets with CRUD operations
  */
+
+@Singleton
 class RacketsRepositoryImpl(
     private val dataBaseService: DataBaseService
 ) : RacketsRepository {
