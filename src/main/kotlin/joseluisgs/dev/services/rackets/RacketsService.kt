@@ -21,6 +21,6 @@ interface RacketsService {
     suspend fun delete(id: Long): Result<Racket, RacketError>
     suspend fun updateImage(id: Long, image: String): Result<Racket, RacketError>
 
-    // Notifictions state
+    // Notifications state
     val notificationState: StateFlow<RacketNotification>
 }

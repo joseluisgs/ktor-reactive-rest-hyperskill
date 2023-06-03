@@ -28,11 +28,27 @@ class DataBaseService(
 
     private val connectionFactory by lazy {
         val options = ConnectionFactoryOptions.builder()
-            .option(ConnectionFactoryOptions.DRIVER, dataBaseConfig.property("database.driver").getString())
-            .option(ConnectionFactoryOptions.PROTOCOL, dataBaseConfig.property("database.protocol").getString())
-            .option(ConnectionFactoryOptions.USER, dataBaseConfig.property("database.user").getString())
-            .option(ConnectionFactoryOptions.PASSWORD, dataBaseConfig.property("database.password").getString())
-            .option(ConnectionFactoryOptions.DATABASE, dataBaseConfig.property("database.database").getString())
+            .option(
+                ConnectionFactoryOptions.DRIVER,
+                dataBaseConfig.propertyOrNull("database.driver")?.getString() ?: "h2"
+            )
+            .option(
+                ConnectionFactoryOptions.PROTOCOL,
+                dataBaseConfig.propertyOrNull("database.protocol")?.getString() ?: "mem"
+            )
+            .option(
+                ConnectionFactoryOptions.USER,
+                dataBaseConfig.propertyOrNull("database.user")?.getString() ?: "sa"
+            )
+            .option(
+                ConnectionFactoryOptions.PASSWORD,
+                dataBaseConfig.propertyOrNull("database.password")?.getString() ?: ""
+            )
+            .option(
+                ConnectionFactoryOptions.DATABASE,
+                dataBaseConfig.propertyOrNull("database.database")?.getString()
+                    ?: "r2dbc:h2:mem:///test;DB_CLOSE_DELAY=-1"
+            )
             .build()
         ConnectionFactories.get(options)
     }
@@ -55,7 +71,7 @@ class DataBaseService(
         return tables().h2(RacketTable)
     }
 
-    fun initDatabase() = runBlocking {
+    private fun initDatabase() = runBlocking {
         logger.debug { "Init DatabaseService" }
         createTables()
         // Init data
