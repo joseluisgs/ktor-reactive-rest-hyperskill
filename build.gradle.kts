@@ -106,13 +106,20 @@ dependencies {
     implementation("com.ToxicBakery.library.bcrypt:bcrypt:$bcrypt_version")
 
     // Testing
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-    // testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version") // For testing with Ktor Client JSON
+    implementation("io.ktor:ktor-client-auth:$ktor_version") // For testing with Ktor Client Auth JWT
+
+    // Kotlin Test
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
     // JUnit 5 instead of JUnit 4
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junit_version")
+
     // To test coroutines and suspend functions
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version")
+
     // MockK to test with mocks
     testImplementation("io.mockk:mockk:$mockk_version")
 

@@ -1,9 +1,7 @@
 package joseluisgs.dev.dto
 
 import joseluisgs.dev.models.Racket.Companion.DEFAULT_IMAGE
-import joseluisgs.dev.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
 
 
 /**
@@ -29,8 +27,7 @@ data class RacketResponse(
     val price: Double,
     val numberTenisPlayers: Int,
     val image: String,
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val createdAt: LocalDateTime,
+    val createdAt: String,
     val updatedAt: String,
     val isDeleted: Boolean = false
 )

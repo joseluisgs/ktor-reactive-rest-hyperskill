@@ -31,7 +31,7 @@ fun Racket.toResponse() = RacketResponse(
     price = this.price,
     numberTenisPlayers = this.numberTenisPlayers,
     image = this.image,
-    createdAt = this.createdAt,
+    createdAt = this.createdAt.toString(),
     updatedAt = this.updatedAt.toString(),
     isDeleted = this.isDeleted
 )
