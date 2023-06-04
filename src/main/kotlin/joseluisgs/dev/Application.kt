@@ -23,4 +23,5 @@ fun Application.module() {
     configureValidation() // Configure the validation plugin
     configureStatusPages() // Configure the status pages plugin
     configureCompression() // Configure the compression plugin
+    configureCors() // Configure the CORS plugin
 }

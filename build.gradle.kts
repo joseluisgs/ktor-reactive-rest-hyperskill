@@ -28,6 +28,9 @@ val koin_ksp_version: String by project
 // BCrypt
 val bcrypt_version: String by project
 
+// Swagger
+val ktor_swagger_ui_version: String by project
+
 
 
 
@@ -52,9 +55,11 @@ application {
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io") // For Swagger UI
 }
 
 dependencies {
+    // *** Ktor *** //
     // Ktor Core
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
@@ -83,6 +88,10 @@ dependencies {
     // SSL/TLS
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
 
+    // CORS
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
+
+    // *** Others *** //
     // Logging
     // implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("ch.qos.logback:logback-classic:$logbackclassic_version")
@@ -107,7 +116,11 @@ dependencies {
     // BCrypt
     implementation("com.ToxicBakery.library.bcrypt:bcrypt:$bcrypt_version")
 
-    // Testing
+    // Para documentar con Swagger y Open API sobre la marcha en nuestro codigo con DSL
+    implementation("io.github.smiley4:ktor-swagger-ui:$ktor_swagger_ui_version")
+
+    // *** Testing *** //
+    // Ktor Test
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version") // For testing with Ktor Client JSON
     implementation("io.ktor:ktor-client-auth:$ktor_version") // For testing with Ktor Client Auth JWT
@@ -131,7 +144,10 @@ tasks.test {
     useJUnitPlatform()
 }
 
-kotlin {
+// Java 17
+// https://kotlinlang.org/docs/get-started-with-jvm-gradle-project.html#explore-the-build-script
+kotlin { // Extension for easy setup
     jvmToolchain(17) // Target version of generated JVM bytecode
 }
+
 
