@@ -4,9 +4,12 @@ import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactoryOptions
 import joseluisgs.dev.config.AppConfig
 import joseluisgs.dev.data.racketsDemoData
+import joseluisgs.dev.data.userDemoData
 import joseluisgs.dev.entities.RacketTable
+import joseluisgs.dev.entities.UserTable
 import joseluisgs.dev.mappers.toEntity
 import joseluisgs.dev.models.Racket
+import joseluisgs.dev.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -71,7 +74,7 @@ class DataBaseService(
     // Our tables
     private fun getTables(): H2Tables {
         // Return tables
-        return tables().h2(RacketTable)
+        return tables().h2(RacketTable, UserTable)
     }
 
     private fun initDatabase() = runBlocking {
@@ -94,6 +97,7 @@ class DataBaseService(
         logger.debug { "Creating the tables..." }
         launch {
             client createTableIfNotExists RacketTable
+            client createTableIfNotExists UserTable
         }
     }
 
@@ -102,16 +106,23 @@ class DataBaseService(
         logger.debug { "Deleting data..." }
         launch {
             client deleteAllFrom RacketTable
+            client deleteAllFrom UserTable
         }
     }
 
     // Init data
     private suspend fun initDataBaseData() = withContext(Dispatchers.IO) {
-        logger.debug { "Saving rackets demo data..." }
+        logger.debug { "Saving demo data..." }
         launch {
+            logger.debug { "Saving demo rackets..." }
             racketsDemoData().forEach {
                 client insert it.value.copy(id = Racket.NEW_RACKET).toEntity()
             }
+            logger.debug { "Saving demo users..." }
+            userDemoData().forEach {
+                client insert it.value.copy(id = User.NEW_USER).toEntity()
+            }
+
         }
     }
 }
