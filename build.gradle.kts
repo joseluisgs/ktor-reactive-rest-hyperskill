@@ -37,6 +37,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
     // KSP for Koin Annotations
     id("com.google.devtools.ksp") version "1.8.21-1.0.11"
+    // Dokka for documentation
+    id("org.jetbrains.dokka") version "1.8.10"
 }
 
 group = "joseluisgs.dev"
