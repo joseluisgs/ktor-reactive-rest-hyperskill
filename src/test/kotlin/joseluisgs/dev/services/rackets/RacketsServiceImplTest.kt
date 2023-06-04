@@ -38,10 +38,6 @@ class RacketsServiceImplTest {
 
     val rackets = racketsDemoData().values
 
-    /* init {
-         MockKAnnotations.init(this)
-     }*/
-
     @Test
     fun findAll() = runTest {
         // Given

@@ -102,7 +102,7 @@ class UsersServiceImpl(
         // find, if exists delete in cache and repository and notify
         return findById(id).andThen {
             Ok(usersRepository.delete(it).also {
-                cacheService.rackets.invalidate(id)
+                cacheService.users.invalidate(id)
             })
         }
     }
