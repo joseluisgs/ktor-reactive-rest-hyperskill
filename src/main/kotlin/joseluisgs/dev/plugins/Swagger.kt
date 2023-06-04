@@ -26,17 +26,13 @@ fun Application.configureSwagger() {
                 url = "https://joseluisgs.dev/docs/license/"
             }
         }
-        server {
-            url = "https://github.com/joseluisgs/ktor-reactive-rest-hyperskill"
-            description = "Ktor Hyperskill Reactive API REST"
-        }
 
         schemasInComponentSection = true
         examplesInComponentSection = true
         automaticTagGenerator = { url -> url.firstOrNull() }
         // We can filter paths and methods
         pathFilter = { method, url ->
-            url.contains("api")
+            url.contains("rackets")
             //(method == HttpMethod.Get && url.firstOrNull() == "api")
             // || url.contains("test")
         }

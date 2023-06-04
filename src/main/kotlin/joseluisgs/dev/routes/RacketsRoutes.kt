@@ -2,6 +2,7 @@ package joseluisgs.dev.routes
 
 import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.mapBoth
+import io.github.smiley4.ktorswaggerui.dsl.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -13,6 +14,7 @@ import io.ktor.server.websocket.*
 import io.ktor.util.pipeline.*
 import joseluisgs.dev.dto.RacketPage
 import joseluisgs.dev.dto.RacketRequest
+import joseluisgs.dev.dto.RacketResponse
 import joseluisgs.dev.errors.racket.RacketError
 import joseluisgs.dev.errors.storage.StorageError
 import joseluisgs.dev.mappers.toModel
@@ -24,6 +26,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.toList
 import mu.KotlinLogging
 import org.koin.ktor.ext.inject
+import java.io.File
 import java.time.LocalDateTime
 import org.koin.ktor.ext.get as koinGet
 
@@ -52,7 +55,28 @@ fun Application.racketsRoutes() {
         route("/$ENDPOINT") {
 
             // Get all racket --> GET /api/rackets
-            get {
+            get({
+                description = "Get All Rackets"
+                request {
+                    queryParameter<Int>("page") {
+                        description = "page number"
+                        required = false // Optional
+                    }
+                    queryParameter<Int>("perPage") {
+                        description = "number of elements per page"
+                        required = false // Optional
+                    }
+                }
+                response {
+                    default {
+                        description = "List of Rackets"
+                    }
+                    HttpStatusCode.OK to {
+                        description = "List of Rackets"
+                        body<List<RacketResponse>> { description = "List of Rackets" }
+                    }
+                }
+            }) {
 
                 // QueryParams: rackets?page=1&perPage=10
                 call.request.queryParameters["page"]?.toIntOrNull()?.let {
@@ -77,7 +101,24 @@ fun Application.racketsRoutes() {
             }
 
             // Get one racket by id --> GET /api/rackets/{id}
-            get("{id}") {
+            get("{id}", {
+                description = "Get Racket by ID"
+                request {
+                    pathParameter<Long>("id") {
+                        description = "Racket ID"
+                    }
+                }
+                response {
+                    HttpStatusCode.OK to {
+                        description = "Racket"
+                        body<RacketResponse> { description = "Racket" }
+                    }
+                    HttpStatusCode.NotFound to {
+                        description = "Racket not found"
+                        body<RacketError.NotFound> { description = "Racket not found" }
+                    }
+                }
+            }) {
                 logger.debug { "GET BY ID /$ENDPOINT/{id}" }
 
                 call.parameters["id"]?.toLong()?.let { id ->
@@ -89,7 +130,23 @@ fun Application.racketsRoutes() {
             }
 
             // Get one racket by brand --> GET /api/rackets/brand/{brand}
-            get("brand/{brand}") {
+            get("brand/{brand}", {
+                description = "Get Racket by Brand"
+                request {
+                    pathParameter<String>("brand") {
+                        description = "Racket Brand"
+                    }
+                }
+                response {
+                    default {
+                        description = "List of Rackets"
+                    }
+                    HttpStatusCode.OK to {
+                        description = "List of Rackets"
+                        body<List<RacketResponse>> { description = "List of Rackets" }
+                    }
+                }
+            }) {
                 logger.debug { "GET BY BRAND /$ENDPOINT/brand/{brand}" }
 
                 call.parameters["brand"]?.let {
@@ -100,7 +157,22 @@ fun Application.racketsRoutes() {
             }
 
             // Create a new racket --> POST /api/rackets
-            post {
+            post({
+                description = "Create a new Racket"
+                request {
+                    body<RacketRequest> { description = "Racket request" }
+                }
+                response {
+                    HttpStatusCode.Created to {
+                        description = "Racket created"
+                        body<RacketResponse> { description = "Racket created" }
+                    }
+                    HttpStatusCode.BadRequest to {
+                        description = "Racket errors"
+                        body<RacketError.BadRequest> { description = "Racket bad request petition" }
+                    }
+                }
+            }) {
                 logger.debug { "POST /$ENDPOINT" }
 
                 racketsService.save(
@@ -112,7 +184,29 @@ fun Application.racketsRoutes() {
             }
 
             // Update a racket --> PUT /api/rackets/{id}
-            put("{id}") {
+            put("{id}", {
+                description = "Update a Racket"
+                request {
+                    pathParameter<Long>("id") {
+                        description = "Racket ID"
+                    }
+                    body<RacketRequest> { description = "Racket request" }
+                }
+                response {
+                    HttpStatusCode.OK to {
+                        description = "Racket updated"
+                        body<RacketResponse> { description = "Racket updated" }
+                    }
+                    HttpStatusCode.BadRequest to {
+                        description = "Racket errors"
+                        body<RacketError.BadRequest> { description = "Racket bad request petition" }
+                    }
+                    HttpStatusCode.NotFound to {
+                        description = "Racket not found"
+                        body<RacketError.NotFound> { description = "Racket not found" }
+                    }
+                }
+            }) {
                 logger.debug { "PUT /$ENDPOINT/{id}" }
 
                 call.parameters["id"]?.toLong()?.let { id ->
@@ -127,7 +221,31 @@ fun Application.racketsRoutes() {
             }
 
             // Update a racket image --> PATCH /api/rackets/{id}
-            patch("{id}") {
+            patch("{id}", {
+                description = "Update a Racket image"
+                request {
+                    pathParameter<Long>("id") {
+                        description = "Racket ID"
+                    }
+                    multipartBody {
+                        part<File>("file")
+                    }
+                }
+                response {
+                    HttpStatusCode.OK to {
+                        description = "Racket image updated"
+                        body<RacketResponse> { description = "Racket image updated" }
+                    }
+                    HttpStatusCode.BadRequest to {
+                        description = "Racket errors"
+                        body<RacketError.BadRequest> { description = "Racket bad request petition" }
+                    }
+                    HttpStatusCode.NotFound to {
+                        description = "Racket not found"
+                        body<RacketError.NotFound> { description = "Racket not found" }
+                    }
+                }
+            }) {
                 logger.debug { "PATCH /$ENDPOINT/{id}" }
 
                 call.parameters["id"]?.toLong()?.let { id ->
@@ -159,7 +277,23 @@ fun Application.racketsRoutes() {
             }
 
             // Delete a racket --> DELETE /api/rackets/{id}
-            delete("{id}") {
+            delete("{id}", {
+                description = "Delete a Racket"
+                request {
+                    pathParameter<Long>("id") {
+                        description = "Racket ID"
+                    }
+                }
+                response {
+                    HttpStatusCode.NoContent to {
+                        description = "Racket deleted"
+                    }
+                    HttpStatusCode.NotFound to {
+                        description = "Racket not found"
+                        body<RacketError.NotFound> { description = "Racket not found" }
+                    }
+                }
+            }) {
                 logger.debug { "DELETE /$ENDPOINT/{id}" }
 
                 call.parameters["id"]?.toLong()?.let { id ->
@@ -174,7 +308,19 @@ fun Application.racketsRoutes() {
             }
 
             // Get racket image --> GET /api/rackets/image/{image}
-            get("image/{image}") {
+            get("image/{image}", {
+                description = "Get a Racket image"
+                request {
+                    pathParameter<String>("image") {
+                        description = "Racket image"
+                    }
+                }
+                response {
+                    HttpStatusCode.OK to {
+                        description = "Racket image"
+                    }
+                }
+            }) {
                 logger.debug { "GET IMAGE /$ENDPOINT/image/{image}" }
 
                 call.parameters["image"]?.let { image ->
