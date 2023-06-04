@@ -150,4 +150,27 @@ kotlin { // Extension for easy setup
     jvmToolchain(17) // Target version of generated JVM bytecode
 }
 
+// To generate Docker Image with JRE 17
+ktor {
+    docker {
+        localImageName.set("hyperskill-reactive-api-kotlin-ktor")
+        imageTag.set("0.0.1-preview")
+        jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
+        portMappings.set(
+            listOf(
+                io.ktor.plugin.features.DockerPortMapping(
+                    8080,
+                    8080,
+                    io.ktor.plugin.features.DockerPortMappingProtocol.TCP
+                ),
+                io.ktor.plugin.features.DockerPortMapping(
+                    8083,
+                    8083,
+                    io.ktor.plugin.features.DockerPortMappingProtocol.TCP
+                )
+            )
+        )
+    }
+}
+
 
