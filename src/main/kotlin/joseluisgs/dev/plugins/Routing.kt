@@ -14,7 +14,7 @@ import joseluisgs.dev.routes.usersRoutes
 fun Application.configureRouting() {
     routing {
         get("/") {
-            call.respondText("Hello World!")
+            call.respondText("\uD83D\uDC4B Hello HyperSkill Reactive API REST!")
         }
     }
 

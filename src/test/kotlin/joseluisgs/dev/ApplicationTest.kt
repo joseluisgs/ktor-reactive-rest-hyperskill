@@ -16,7 +16,7 @@ class ApplicationTest {
         }
         client.get("/").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("Hello World!", bodyAsText())
+            assertEquals("\uD83D\uDC4B Hello HyperSkill Reactive API REST!", bodyAsText())
         }
     }
 }
