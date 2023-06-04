@@ -123,9 +123,7 @@ fun Application.usersRoutes() {
                         .toString().replace("\"", "").toLong()
 
                     val baseUrl =
-                        call.request.origin.scheme + "://" + call.request.host() + ":" + call.request.port() + "/api/storage/"
-                    logger.debug { "Tomando datos multiparte" }
-
+                        call.request.origin.scheme + "://" + call.request.host() + ":" + call.request.port() + "/$ENDPOINT/image/"
                     val multipartData = call.receiveMultipart()
                     multipartData.forEachPart { part ->
                         if (part is PartData.FileItem) {
@@ -146,6 +144,18 @@ fun Application.usersRoutes() {
                                 failure = { handleUserError(it) }
                             )
                         }
+                    }
+                }
+
+                // Get racket image --> GET /api/rackets/image/{image}
+                get("image/{image}") {
+                    logger.debug { "GET IMAGE /$ENDPOINT/image/{image}" }
+
+                    call.parameters["image"]?.let { image ->
+                        storageService.getFile(image).mapBoth(
+                            success = { call.respondFile(it) },
+                            failure = { handleUserError(it) }
+                        )
                     }
                 }
 

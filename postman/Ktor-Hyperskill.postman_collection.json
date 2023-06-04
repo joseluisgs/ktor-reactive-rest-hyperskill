@@ -7,266 +7,580 @@
 	},
 	"item": [
 		{
-			"name": "GET ALL",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://0.0.0.0:8080/api/rackets",
-					"protocol": "http",
-					"host": [
-						"0",
-						"0",
-						"0",
-						"0"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"rackets"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET ALL PAGEABLE",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://0.0.0.0:8080/api/rackets?page=1&perPage=2",
-					"protocol": "http",
-					"host": [
-						"0",
-						"0",
-						"0",
-						"0"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"rackets"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "1"
+			"name": "Rackets",
+			"item": [
+				{
+					"name": "GET ALL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8080/api/rackets",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL PAGEABLE",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8080/api/rackets?page=1&perPage=2",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rackets"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8080/api/rackets/1",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rackets",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID BRAND",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8080/api/rackets/brand/babolat",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rackets",
+								"brand",
+								"babolat"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"brand\": \"New Racquet\",\n    \"model\": \"New Model\",\n    \"price\": 200.0,\n    \"numberTenisPlayers\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						{
-							"key": "perPage",
-							"value": "2"
+						"url": {
+							"raw": "http://0.0.0.0:8080/api/rackets",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rackets"
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET BY ID",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://0.0.0.0:8080/api/rackets/1",
-					"protocol": "http",
-					"host": [
-						"0",
-						"0",
-						"0",
-						"0"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"rackets",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET BY ID BRAND",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://0.0.0.0:8080/api/rackets/brand/babolat",
-					"protocol": "http",
-					"host": [
-						"0",
-						"0",
-						"0",
-						"0"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"rackets",
-						"brand",
-						"babolat"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"brand\": \"New Racquet\",\n    \"model\": \"New Model\",\n    \"price\": 200.0,\n    \"numberTenisPlayers\": 10\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://0.0.0.0:8080/api/rackets",
-					"protocol": "http",
-					"host": [
-						"0",
-						"0",
-						"0",
-						"0"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"rackets"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "UPDATE",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"brand\": \"Updated Racquet\",\n    \"model\": \"Updated Model\",\n    \"price\": 200.0,\n    \"numberTenisPlayers\": 10\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"brand\": \"Updated Racket\",\n    \"model\": \"Updated Model\",\n    \"price\": 200.0,\n    \"numberTenisPlayers\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8080/api/rackets/5",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rackets",
+								"5"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://0.0.0.0:8080/api/rackets/5",
-					"protocol": "http",
-					"host": [
-						"0",
-						"0",
-						"0",
-						"0"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"rackets",
-						"5"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "DELETE",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "DELETE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8080/api/rackets/5",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rackets",
+								"5"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://0.0.0.0:8080/api/rackets/5",
-					"protocol": "http",
-					"host": [
-						"0",
-						"0",
-						"0",
-						"0"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"rackets",
-						"5"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "PATCH IMAGE",
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "image",
-							"type": "file",
-							"src": "/home/joseluisgs/Proyectos/ktor-reactive-rest-hyperskill/postman/racket.jpg"
+				{
+					"name": "PATCH IMAGE",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/joseluisgs/Proyectos/ktor-reactive-rest-hyperskill/postman/racket.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8080/api/rackets/1",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rackets",
+								"1"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://0.0.0.0:8080/api/rackets/1",
-					"protocol": "http",
-					"host": [
-						"0",
-						"0",
-						"0",
-						"0"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"rackets",
-						"1"
-					]
+				{
+					"name": "GET IMAGE",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8080/api/rackets/image/1685114639748.jpg",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rackets",
+								"image",
+								"1685114639748.jpg"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "GET IMAGE",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://0.0.0.0:8080/api/rackets/image/1685114639748.jpg",
-					"protocol": "http",
-					"host": [
-						"0",
-						"0",
-						"0",
-						"0"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"rackets",
-						"image",
-						"1685114639748.jpg"
-					]
+			"name": "Users",
+			"item": [
+				{
+					"name": "POST Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"create\",\n    \"email\": \"create@create.com\",\n    \"username\": \"create\",\n    \"password\": \"create1234\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8080/api/users/register",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Login User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"ana\",\n    \"password\": \"ana1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Login Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"pepe\",\n    \"password\": \"pepe1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Me (auth)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJyYWNrZXRzLWt0b3ItYXV0aCIsImlzcyI6InJhY2tldHMta3RvciIsInN1YiI6IkF1dGhlbnRpY2F0aW9uIiwidXNlcm5hbWUiOiJwZXBlIiwidXNlcm1haWwiOiJwZXBlQHBlcmV6LmNvbSIsInVzZXJJZCI6IjEiLCJleHAiOjE2ODU4NzE2ODh9.FslU5FRx1zQpfSEG5nn1u6be-jgMaABt1FGCE_6gocye-Qty-nI-_4jz23OGPBjBpiKNwfnROAKHSq0WaaYy6w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Me Update Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJyYWNrZXRzLWt0b3ItYXV0aCIsImlzcyI6InJhY2tldHMta3RvciIsInN1YiI6IkF1dGhlbnRpY2F0aW9uIiwidXNlcm5hbWUiOiJhbmEiLCJ1c2VybWFpbCI6ImFuYUBsb3Blei5jb20iLCJ1c2VySWQiOiIyIiwiZXhwIjoxNjg1ODcxODcwfQ.fymnLr-ZG8hu7HV0jH7CdqWo5m9sBp8Y3asCcrkTFY322WEDf3gGCn1_QPfLyKqlx7YtW-933DYML9FYDn24kA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ana Lopez Updated\",\n    \"email\": \"updated@lopez.com\",\n    \"username\": \"anaupdated\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Me Avatar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJyYWNrZXRzLWt0b3ItYXV0aCIsImlzcyI6InJhY2tldHMta3RvciIsInN1YiI6IkF1dGhlbnRpY2F0aW9uIiwidXNlcm5hbWUiOiJhbmEiLCJ1c2VybWFpbCI6ImFuYUBsb3Blei5jb20iLCJ1c2VySWQiOiIyIiwiZXhwIjoxNjg1ODcxODcwfQ.fymnLr-ZG8hu7HV0jH7CdqWo5m9sBp8Y3asCcrkTFY322WEDf3gGCn1_QPfLyKqlx7YtW-933DYML9FYDn24kA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/joseluisgs/Proyectos/ktor-reactive-rest-hyperskill/postman/user.jpg"
+								},
+								{
+									"key": "username",
+									"value": "pepe",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL Users (admin)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJyYWNrZXRzLWt0b3ItYXV0aCIsImlzcyI6InJhY2tldHMta3RvciIsInN1YiI6IkF1dGhlbnRpY2F0aW9uIiwidXNlcm5hbWUiOiJwZXBlIiwidXNlcm1haWwiOiJwZXBlQHBlcmV6LmNvbSIsInVzZXJJZCI6IjEiLCJleHAiOjE2ODU4NzE2ODh9.FslU5FRx1zQpfSEG5nn1u6be-jgMaABt1FGCE_6gocye-Qty-nI-_4jz23OGPBjBpiKNwfnROAKHSq0WaaYy6w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJyYWNrZXRzLWt0b3ItYXV0aCIsImlzcyI6InJhY2tldHMta3RvciIsInN1YiI6IkF1dGhlbnRpY2F0aW9uIiwidXNlcm5hbWUiOiJhbmEiLCJ1c2VybWFpbCI6ImFuYUBsb3Blei5jb20iLCJ1c2VySWQiOiIyIiwiZXhwIjoxNjg1ODcxODcwfQ.fymnLr-ZG8hu7HV0jH7CdqWo5m9sBp8Y3asCcrkTFY322WEDf3gGCn1_QPfLyKqlx7YtW-933DYML9FYDn24kA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/delete/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"delete",
+								"3"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
