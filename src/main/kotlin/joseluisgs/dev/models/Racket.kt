@@ -18,7 +18,7 @@ data class Racket(
     val isDeleted: Boolean = false
 ) {
     companion object {
-        val NEW_RACKET = -1L
+        const val NEW_RACKET = -1L
         const val DEFAULT_IMAGE = "https://i.imgur.com/AsZ2xYS.jpg"
     }
 }
