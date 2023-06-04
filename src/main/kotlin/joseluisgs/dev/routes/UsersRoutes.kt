@@ -31,7 +31,7 @@ import org.koin.ktor.ext.inject
 
 private val logger = KotlinLogging.logger {}
 
-private const val ENDPOINT = "api/users" // Ruta de acceso, puede aunar un recurso
+private const val ENDPOINT = "api/users" // Endpoint
 
 fun Application.usersRoutes() {
 
