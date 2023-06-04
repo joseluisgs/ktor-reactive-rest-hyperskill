@@ -3,6 +3,9 @@ package joseluisgs.dev.dto
 import joseluisgs.dev.models.User
 import kotlinx.serialization.Serializable
 
+/**
+ * User DTO for response
+ */
 @Serializable
 data class UserDto(
     val id: Long,
@@ -16,6 +19,9 @@ data class UserDto(
     val isDeleted: Boolean = false
 )
 
+/**
+ * User DTO for request to create a new user
+ */
 @Serializable
 data class UserCreateDto(
     val name: String,
@@ -26,6 +32,9 @@ data class UserCreateDto(
     val role: User.Role? = User.Role.USER,
 )
 
+/**
+ * User DTO for request to update a user
+ */
 @Serializable
 data class UserUpdateDto(
     val name: String,
@@ -33,12 +42,18 @@ data class UserUpdateDto(
     val username: String,
 )
 
+/**
+ * User DTO for request to login a user
+ */
 @Serializable
 data class UserLoginDto(
     val username: String,
     val password: String
 )
 
+/**
+ * User DTO for response with token
+ */
 @Serializable
 data class UserWithTokenDto(
     val user: UserDto,

@@ -6,6 +6,11 @@ import joseluisgs.dev.entities.UserEntity
 import joseluisgs.dev.models.User
 
 
+/**
+ * Mapper for User Model to User DTO
+ * @return UserDto
+ * @see UserDto
+ */
 fun User.toDto(): UserDto {
     return UserDto(
         id = this.id,
@@ -20,6 +25,11 @@ fun User.toDto(): UserDto {
     )
 }
 
+/**
+ * Mapper for User Model to User DTO
+ * @return User
+ * @see UserDto
+ */
 fun UserCreateDto.toModel(): User {
     return User(
         name = this.name,
@@ -31,6 +41,11 @@ fun UserCreateDto.toModel(): User {
     )
 }
 
+/**
+ * Mapper for User Entity to User DTO
+ * @return User
+ * @see UserEntity
+ */
 fun UserEntity.toModel(): User {
     return User(
         id = this.id ?: User.NEW_USER,
@@ -46,6 +61,11 @@ fun UserEntity.toModel(): User {
     )
 }
 
+/**
+ * Mapper for User Model to User Entity
+ * @return UserEntity
+ * @see User
+ */
 fun User.toEntity(): UserEntity {
     return UserEntity(
         id = if (this.id == User.NEW_USER) null else this.id,

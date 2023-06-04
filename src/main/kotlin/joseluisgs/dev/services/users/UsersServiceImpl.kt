@@ -24,12 +24,22 @@ class UsersServiceImpl(
     private val cacheService: CacheService
 ) : UsersService {
 
+    /**
+     * Find all users
+     * @return Flow<User> Flow of users
+     * @see User
+     */
     override suspend fun findAll(): Flow<User> {
         logger.debug { "findAll: search all users" }
 
         return usersRepository.findAll()
     }
 
+    /**
+     * Find by id
+     * @param id Long Id of user
+     * @return Result<User, UserError> Result of user or error if not found
+     */
     override suspend fun findById(id: Long): Result<User, UserError> {
         logger.debug { "findById: search user by id" }
 
@@ -46,6 +56,11 @@ class UsersServiceImpl(
         }
     }
 
+    /**
+     * Find by username
+     * @param username String Username of user
+     * @return Result<User, UserError> Result of user or error if not found
+     */
     override suspend fun findByUsername(username: String): Result<User, UserError> {
         logger.debug { "findById: search user by username" }
 
@@ -57,7 +72,12 @@ class UsersServiceImpl(
         } ?: Err(UserError.NotFound("User with username: $username not found"))
     }
 
-
+    /**
+     * Check if username and password are valid
+     * @param username String Username of user
+     * @param password String Password of user
+     * @return Result<User, UserError> Result of user or error if not found
+     */
     override suspend fun checkUserNameAndPassword(username: String, password: String): Result<User, UserError> {
         logger.debug { "checkUserNameAndPassword: check username and password" }
 
@@ -66,6 +86,11 @@ class UsersServiceImpl(
         } ?: Err(UserError.BadCredentials("User password or username not valid"))
     }
 
+    /**
+     * Save user
+     * @param user User User to save
+     * @return Result<User, UserError> Result of user or error if not found
+     */
     override suspend fun save(user: User): Result<User, UserError> {
         logger.debug { "save: save user" }
 
@@ -79,6 +104,12 @@ class UsersServiceImpl(
 
     }
 
+    /**
+     * Update user
+     * @param user User to update
+     * @param id Long Id of user
+     * @return Result<User, UserError> Result of user or error if not found
+     */
     override suspend fun update(id: Long, user: User): Result<User, UserError> {
         logger.debug { "update: update user" }
 
@@ -96,6 +127,11 @@ class UsersServiceImpl(
         }
     }
 
+    /**
+     * Delete user
+     * @param id Long Id of user
+     * @return Result<User, UserError> Result of user or error if not found
+     */
     override suspend fun delete(id: Long): Result<User, UserError> {
         logger.debug { "delete: delete" }
 
@@ -107,6 +143,11 @@ class UsersServiceImpl(
         }
     }
 
+    /**
+     * Check if user is admin
+     * @param id Long Id of user
+     * @return Result<Boolean, UserError> Result of user or error if not found
+     */
     override suspend fun isAdmin(id: Long): Result<Boolean, UserError> {
         logger.debug { "isAdmin: chek if user is admin" }
         return findById(id).andThen {
@@ -119,6 +160,12 @@ class UsersServiceImpl(
         }
     }
 
+    /**
+     * Update image of user
+     * @param id Long Id of user
+     * @param image String Image of user
+     * @return Result<User, UserError> Result of user or error if not found
+     */
     override suspend fun updateImage(id: Long, image: String): Result<User, UserError> {
         logger.debug { "updateImage: update image user" }
 

@@ -30,24 +30,46 @@ class RacketsServiceImpl(
     private val racketsRepository: RacketsRepository,
     private val cacheService: CacheService
 ) : RacketsService {
+
+    /**
+     * Find all Rackets
+     * @return Flow<Racket> Rackets
+     * @see Racket
+     */
     override suspend fun findAll(): Flow<Racket> {
         logger.debug { "findAll: search all rackets" }
 
         return racketsRepository.findAll()
     }
 
+    /**
+     * Find all Rackets with pagination
+     * @param page Int Page to search
+     * @param perPage Int Number of elements per page
+     * @return Flow<Racket> Rackets
+     */
     override suspend fun findAllPageable(page: Int, perPage: Int): Flow<Racket> {
         logger.debug { "findAllPageable: search all rackets with pagination" }
 
         return racketsRepository.findAllPageable(page, perPage)
     }
 
+    /**
+     * Find all Rackets by brand
+     * @param brand String Brand to search
+     * @return Flow<Racket> Rackets
+     */
     override suspend fun findByBrand(brand: String): Flow<Racket> {
         logger.debug { "findByBrand: search all rackets by brand" }
 
         return racketsRepository.findByBrand(brand)
     }
 
+    /**
+     * Find by id
+     * @param id Long Id to search
+     * @return Result<Racket, RacketError> Racket or error if not exists
+     */
     override suspend fun findById(id: Long): Result<Racket, RacketError> {
         logger.debug { "findById: search racket by id" }
 
@@ -64,6 +86,11 @@ class RacketsServiceImpl(
         }
     }
 
+    /**
+     * Save a Racket
+     * @param racket Racket Racket to save
+     * @return Result<Racket, RacketError> Racket or error if not possible
+     */
     override suspend fun save(racket: Racket): Result<Racket, RacketError> {
         logger.debug { "save: save racket" }
 
@@ -74,6 +101,12 @@ class RacketsServiceImpl(
         })
     }
 
+    /**
+     * Update a Racket
+     * @param id Long Id to update
+     * @param racket Racket Racket to update
+     * @return Result<Racket, RacketError> Racket or error if not possible
+     */
     override suspend fun update(id: Long, racket: Racket): Result<Racket, RacketError> {
         logger.debug { "update: update racket" }
 
@@ -95,6 +128,11 @@ class RacketsServiceImpl(
         }
     }
 
+    /**
+     * Delete a Racket
+     * @param id Long Id to delete
+     * @return Result<Racket, RacketError> Racket or error if not possible
+     */
     override suspend fun delete(id: Long): Result<Racket, RacketError> {
         logger.debug { "delete: delete racket" }
 
@@ -107,6 +145,12 @@ class RacketsServiceImpl(
         }
     }
 
+    /**
+     * Update a Racket image
+     * @param id Long Id to update
+     * @param image String Image to update
+     * @return Result<Racket, RacketError> Racket or error if not possible
+     */
     override suspend fun updateImage(id: Long, image: String): Result<Racket, RacketError> {
         logger.debug { "updateImage: update image racket" }
 

@@ -35,6 +35,11 @@ class StorageServiceImpl(
         initStorageDirectory()
     }
 
+    /**
+     * Inits the storage directory
+     * If not exists, creates it
+     * If exists, clean it if dev
+     */
     private fun initStorageDirectory() {
         // Create upload directory if not exists (or ignore if exists)
         // and clean if dev
@@ -45,6 +50,13 @@ class StorageServiceImpl(
         }
     }
 
+    /**
+     * Saves a file in our storage
+     * @param fileName String Name of the file
+     * @param fileUrl String URL of the file
+     * @param fileBytes ByteArray Bytes of the file
+     * @return Result<Map<String, String>, StorageError> Map if Ok, StorageError if not
+     */
     override suspend fun saveFile(
         fileName: String,
         fileUrl: String,
@@ -67,6 +79,11 @@ class StorageServiceImpl(
             }
         }
 
+    /**
+     * Retrieves a file from our storage
+     * @param fileName String Name of the file
+     * @return Result<File, StorageError> File if Ok, StorageError if not
+     */
     override suspend fun getFile(fileName: String): Result<File, StorageError> = withContext(Dispatchers.IO) {
         logger.debug { "Get file: $fileName" }
         return@withContext if (!File("${uploadDir}/$fileName").exists()) {
@@ -76,6 +93,11 @@ class StorageServiceImpl(
         }
     }
 
+    /**
+     * Deletes a file from our storage
+     * @param fileName String Name of the file
+     * @return Result<String, StorageError> String if Ok, StorageError if not
+     */
     override suspend fun deleteFile(fileName: String): Result<String, StorageError> = withContext(Dispatchers.IO) {
         logger.debug { "Remove file: $fileName" }
         Files.deleteIfExists(Path.of("${uploadDir}/$fileName"))

@@ -45,6 +45,11 @@ class TokensService(
         logger.debug { "Iniciando servicio de tokens con audience: $audience" }
     }
 
+    /**
+     * Generate a token JWT
+     * @param user User
+     * @return String
+     */
     fun generateJWT(user: User): String {
         return JWT.create()
             .withAudience(audience)
@@ -62,6 +67,11 @@ class TokensService(
             )
     }
 
+    /**
+     * Verify a token JWT
+     * @return JWTVerifier
+     * @throws TokenException.InvalidTokenException
+     */
     fun verifyJWT(): JWTVerifier {
 
         return try {

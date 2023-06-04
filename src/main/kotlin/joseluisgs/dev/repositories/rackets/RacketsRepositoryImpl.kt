@@ -18,6 +18,7 @@ private val logger = KotlinLogging.logger {}
 
 /**
  * Repository of Racquets with CRUD operations
+ * @property dataBaseService DataBaseService
  */
 
 @Singleton
@@ -25,6 +26,10 @@ class RacketsRepositoryImpl(
     private val dataBaseService: DataBaseService
 ) : RacketsRepository {
 
+    /**
+     * Find all Rackets
+     * @return Flow<Racket> Flow of Rackets
+     */
     override suspend fun findAll(): Flow<Racket> = withContext(Dispatchers.IO) {
         logger.debug { "findAll" }
 
@@ -32,6 +37,11 @@ class RacketsRepositoryImpl(
             .fetchAll().map { it.toModel() }
     }
 
+    /**
+     * Find by ID, if not exists return null
+     * @param id Long ID
+     * @return Racket? Racket or null
+     */
     override suspend fun findById(id: Long): Racket? = withContext(Dispatchers.IO) {
         logger.debug { "findById: $id" }
 
@@ -40,6 +50,12 @@ class RacketsRepositoryImpl(
             .fetchFirstOrNull()?.toModel()
     }
 
+    /**
+     * Find all Rackets with pagination
+     * @param page Int Page to show
+     * @param perPage Int Number of elements per page
+     * @return Flow<Racket> Flow of Rackets
+     */
     override suspend fun findAllPageable(page: Int, perPage: Int): Flow<Racket> = withContext(Dispatchers.IO) {
         logger.debug { "findAllPageable: $page, $perPage" }
 
@@ -52,6 +68,11 @@ class RacketsRepositoryImpl(
 
     }
 
+    /**
+     * Find by brand
+     * @param brand String Brand to search
+     * @return Flow<Racket> Flow of Rackets
+     */
     override suspend fun findByBrand(brand: String): Flow<Racket> = withContext(Dispatchers.IO) {
         logger.debug { "findByBrand: $brand" }
         return@withContext (dataBaseService.client selectFrom RacketTable)
@@ -60,6 +81,11 @@ class RacketsRepositoryImpl(
             .map { it.toModel() }
     }
 
+    /**
+     * Save a Racket, if exists update, else create
+     * @param entity Racket Racket to save
+     * @return Racket Racket saved or updated
+     */
     override suspend fun save(entity: Racket): Racket = withContext(Dispatchers.IO) {
         logger.debug { "save: $entity" }
 
@@ -70,6 +96,11 @@ class RacketsRepositoryImpl(
         }
     }
 
+    /**
+     * Create a Racket
+     * @param entity Racket to save
+     * @return Racket Racket saved
+     */
     private suspend fun create(entity: Racket): Racket {
         val newEntity = entity.copy(createdAt = LocalDateTime.now(), updatedAt = LocalDateTime.now())
             .toEntity()
@@ -77,6 +108,11 @@ class RacketsRepositoryImpl(
         return (dataBaseService.client insertAndReturn newEntity).toModel()
     }
 
+    /**
+     * Update a Racket
+     * @param entity Racket to update
+     * @return Racket Racket updated
+     */
     private suspend fun update(entity: Racket): Racket {
         logger.debug { "update: $entity" }
         val updateEntity = entity.copy(updatedAt = LocalDateTime.now()).toEntity()
@@ -92,6 +128,11 @@ class RacketsRepositoryImpl(
         return updateEntity.toModel()
     }
 
+    /**
+     * Delete a Racket
+     * @param entity Racket to delete
+     * @return Racket Racket deleted
+     */
     override suspend fun delete(entity: Racket): Racket {
         logger.debug { "delete: $entity" }
         (dataBaseService.client deleteFrom RacketTable
@@ -100,11 +141,19 @@ class RacketsRepositoryImpl(
         return entity
     }
 
+    /**
+     * Delete all Rackets
+     */
     override suspend fun deleteAll() {
         logger.debug { "deleteAll" }
         dataBaseService.client deleteAllFrom RacketTable
     }
 
+    /**
+     * Save all Rackets
+     * @param entities Iterable<Racket> Rackets to save
+     * @return Flow<Racket> Flow of Rackets
+     */
     override suspend fun saveAll(entities: Iterable<Racket>): Flow<Racket> {
         logger.debug { "saveAll: $entities" }
         entities.forEach { save(it) }

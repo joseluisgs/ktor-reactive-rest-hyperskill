@@ -17,11 +17,20 @@ import java.time.LocalDateTime
 private val logger = KotlinLogging.logger {}
 private const val BCRYPT_SALT = 12
 
+/**
+ * Users Repository
+ * @property dataBaseService Database service
+ */
 @Single
 class UsersRepositoryImpl(
     private val dataBaseService: DataBaseService
 ) : UsersRepository {
 
+    /**
+     * Find all users in database
+     * @return Flow<User> Flow of users
+     * @see User
+     */
     override suspend fun findAll(): Flow<User> = withContext(Dispatchers.IO) {
         logger.debug { "findAll" }
 
@@ -29,8 +38,19 @@ class UsersRepositoryImpl(
             .map { it.toModel() }
     }
 
+    /**
+     * Get hashed password from a plain text password
+     * @param password Plain text password
+     * @return String Hashed password by Bcrypt algorithm
+     */
     override fun hashedPassword(password: String) = Bcrypt.hash(password, BCRYPT_SALT).decodeToString()
 
+    /**
+     * Check if username and password are correct
+     * @param username Username
+     * @param password Password
+     * @return User? User if username and password are correct, null otherwise
+     */
     override suspend fun checkUserNameAndPassword(username: String, password: String): User? =
         withContext(Dispatchers.IO) {
             val user = findByUsername(username)
@@ -42,6 +62,11 @@ class UsersRepositoryImpl(
             }
         }
 
+    /**
+     * Find user by id
+     * @param id User id
+     * @return User? User if exists, null otherwise
+     */
     override suspend fun findById(id: Long): User? = withContext(Dispatchers.IO) {
         logger.debug { "findById: Buscando usuario con id: $id" }
 
@@ -50,6 +75,11 @@ class UsersRepositoryImpl(
                 ).fetchFirstOrNull()?.toModel()
     }
 
+    /**
+     * Find user by username
+     * @param username User username
+     * @return User? User if exists, null otherwise
+     */
     override suspend fun findByUsername(username: String): User? = withContext(Dispatchers.IO) {
         logger.debug { "findByUsername: Buscando usuario con username: $username" }
 
@@ -58,6 +88,11 @@ class UsersRepositoryImpl(
                 ).fetchFirstOrNull()?.toModel()
     }
 
+    /**
+     * Save or update user
+     * @param entity User to save or update
+     * @return User User saved or updated
+     */
     override suspend fun save(entity: User): User = withContext(Dispatchers.IO) {
         logger.debug { "save: $entity" }
 
@@ -68,6 +103,11 @@ class UsersRepositoryImpl(
         }
     }
 
+    /**
+     * Create user
+     * @param entity User to create
+     * @return User User created
+     */
     suspend fun create(entity: User): User {
         val newEntity = entity.copy(
             password = Bcrypt.hash(entity.password, 12).decodeToString(),
@@ -81,6 +121,11 @@ class UsersRepositoryImpl(
 
     }
 
+    /**
+     * Update user
+     * @param entity User to update
+     * @return User User updated
+     */
     suspend fun update(entity: User): User {
         logger.debug { "update: $entity" }
         val updateEntity = entity.copy(updatedAt = LocalDateTime.now()).toEntity()
@@ -98,6 +143,11 @@ class UsersRepositoryImpl(
         return updateEntity.toModel()
     }
 
+    /**
+     * Delete user
+     * @param entity User to delete
+     * @return User User deleted
+     */
     override suspend fun delete(entity: User): User {
         logger.debug { "delete: $entity" }
         (dataBaseService.client deleteFrom UserTable
@@ -106,11 +156,20 @@ class UsersRepositoryImpl(
         return entity
     }
 
+    /**
+     * Delete all users
+     * @return Unit
+     */
     override suspend fun deleteAll() {
         logger.debug { "deleteAll" }
         dataBaseService.client deleteAllFrom UserTable
     }
 
+    /**
+     * Save all users
+     * @param entities Iterable<User> Users to save
+     * @return Flow<User> Flow of users
+     */
     override suspend fun saveAll(entities: Iterable<User>): Flow<User> {
         logger.debug { "saveAll: $entities" }
         entities.forEach { save(it) }

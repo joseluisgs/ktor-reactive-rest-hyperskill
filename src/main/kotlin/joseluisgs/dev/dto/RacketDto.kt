@@ -10,6 +10,9 @@ import kotlinx.serialization.Serializable
  * For example we can omit the Serializables for LocalDateTime using String (updatedAt)
  */
 
+/**
+ * Racket DTO for request
+ */
 @Serializable
 data class RacketRequest(
     val brand: String,
@@ -19,6 +22,9 @@ data class RacketRequest(
     val image: String = DEFAULT_IMAGE,
 )
 
+/**
+ * Racket DTO for response
+ */
 @Serializable
 data class RacketResponse(
     val id: Long,
@@ -32,6 +38,9 @@ data class RacketResponse(
     val isDeleted: Boolean = false
 )
 
+/**
+ * Racket DTO for response with pagination
+ */
 @Serializable
 data class RacketPage(
     val page: Int,

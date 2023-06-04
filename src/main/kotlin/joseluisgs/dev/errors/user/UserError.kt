@@ -1,6 +1,8 @@
 package joseluisgs.dev.errors.user
 
-// Errores de usuario
+/**
+ * User Errors
+ */
 sealed class UserError(val message: String) {
     class NotFound(message: String) : UserError(message)
     class BadRequest(message: String) : UserError(message)
