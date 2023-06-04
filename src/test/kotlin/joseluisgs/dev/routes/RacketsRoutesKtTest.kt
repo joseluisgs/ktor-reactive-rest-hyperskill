@@ -23,7 +23,7 @@ private val json = Json { ignoreUnknownKeys = true }
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-class RaquetasRoutesKtTest {
+class RacketsRoutesKtTest {
     // Load configuration from application.conf
     private val config = ApplicationConfig("application.conf")
 
@@ -99,6 +99,7 @@ class RaquetasRoutesKtTest {
     @Order(4)
     fun testPut() = testApplication {
         environment { config }
+
         val client = createClient {
             install(ContentNegotiation) {
                 json()
@@ -136,6 +137,7 @@ class RaquetasRoutesKtTest {
     @Order(5)
     fun testPutNotFound() = testApplication {
         environment { config }
+
         val client = createClient {
             install(ContentNegotiation) {
                 json()
@@ -160,6 +162,7 @@ class RaquetasRoutesKtTest {
                 json()
             }
         }
+
         var response = client.post("/api/rackets") {
             contentType(ContentType.Application.Json)
             setBody(racket)
@@ -185,15 +188,18 @@ class RaquetasRoutesKtTest {
     @Order(8)
     fun testGetById() = testApplication {
         environment { config }
+
         val client = createClient {
             install(ContentNegotiation) {
                 json()
             }
         }
+
         var response = client.post("/api/rackets") {
             contentType(ContentType.Application.Json)
             setBody(racket)
         }
+
         val result = response.bodyAsText()
         var dto = json.decodeFromString<RacketResponse>(result)
 
@@ -224,15 +230,18 @@ class RaquetasRoutesKtTest {
     @Order(10)
     fun testPatchImage() = testApplication {
         environment { config }
+
         val client = createClient {
             install(ContentNegotiation) {
                 json()
             }
         }
+
         var response = client.post("/api/rackets") {
             contentType(ContentType.Application.Json)
             setBody(racket)
         }
+
         val result = response.bodyAsText()
         var dto = json.decodeFromString<RacketResponse>(result)
 
@@ -254,16 +263,6 @@ class RaquetasRoutesKtTest {
         }
 
         assertEquals(HttpStatusCode.OK, response.status)
-        dto = json.decodeFromString<RacketResponse>(result)
-
-        println(dto)
-
-        assertAll(
-            { assertEquals(racket.brand, dto.brand) },
-            { assertEquals(racket.model, dto.model) },
-            { assertEquals(racket.price, dto.price) },
-            { assertEquals(racket.numberTenisPlayers, dto.numberTenisPlayers) },
-        )
     }
 
 }

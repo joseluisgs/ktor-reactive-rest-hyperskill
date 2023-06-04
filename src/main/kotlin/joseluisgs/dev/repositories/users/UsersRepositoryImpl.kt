@@ -69,11 +69,15 @@ class UsersRepositoryImpl(
     }
 
     suspend fun create(entity: User): User {
-        val newEntity = entity.copy(createdAt = LocalDateTime.now(), updatedAt = LocalDateTime.now())
-            .toEntity()
+        val newEntity = entity.copy(
+            password = Bcrypt.hash(entity.password, 12).decodeToString(),
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        ).toEntity()
+
         logger.debug { "create: $newEntity" }
 
-        return (dataBaseService.client insertAndReturn entity.toEntity()).toModel()
+        return (dataBaseService.client insertAndReturn newEntity).toModel()
 
     }
 

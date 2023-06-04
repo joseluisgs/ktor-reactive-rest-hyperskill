@@ -214,7 +214,7 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.handleUserError(
         is UserError.Unauthorized -> call.respond(HttpStatusCode.Unauthorized, error.message)
         is UserError.Forbidden -> call.respond(HttpStatusCode.Forbidden, error.message)
         is UserError.BadCredentials -> call.respond(HttpStatusCode.BadRequest, error.message)
-        is UserError.BadRole -> call.respond(HttpStatusCode.BadRequest, error.message)
+        is UserError.BadRole -> call.respond(HttpStatusCode.Forbidden, error.message)
         // Storage
         is StorageError.BadRequest -> call.respond(HttpStatusCode.BadRequest, error.message)
         is StorageError.NotFound -> call.respond(HttpStatusCode.NotFound, error.message)
