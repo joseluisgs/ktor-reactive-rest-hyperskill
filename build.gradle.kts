@@ -22,10 +22,13 @@ val cache_version: String by project
 val result_version: String by project
 
 // Koin
-// val koin_version: String by project
 val koin_ktor_version: String by project
-val ksp_version: String by project
 val koin_ksp_version: String by project
+
+// BCrypt
+val bcrypt_version: String by project
+
+
 
 
 plugins {
@@ -70,6 +73,11 @@ dependencies {
     // Compression
     implementation("io.ktor:ktor-server-compression:$ktor_version")
 
+    // Auth JWT
+    implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
+
     // Logging
     // implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("ch.qos.logback:logback-classic:$logbackclassic_version")
@@ -88,9 +96,11 @@ dependencies {
     // Koin for Dependency Injection
     implementation("io.insert-koin:koin-ktor:$koin_ktor_version") // Koit for Ktor
     implementation("io.insert-koin:koin-logger-slf4j:$koin_ktor_version") // Koin Logger
-    // implementation("io.insert-koin:koin-core:$koin_version") // Koin Core, but we use Koin for Ktor
     implementation("io.insert-koin:koin-annotations:$koin_ksp_version") // Koin Annotations for KSP
     ksp("io.insert-koin:koin-ksp-compiler:$koin_ksp_version") // Koin KSP Compiler for KSP
+
+    // BCrypt
+    implementation("com.ToxicBakery.library.bcrypt:bcrypt:$bcrypt_version")
 
     // Testing
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
