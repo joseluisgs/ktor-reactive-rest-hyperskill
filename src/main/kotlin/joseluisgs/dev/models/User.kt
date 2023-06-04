@@ -8,7 +8,7 @@ data class User(
     val email: String,
     val username: String,
     val password: String,
-    val avatar: String,
+    val avatar: String = DEFAULT_IMAGE,
     val role: Role = Role.USER,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = LocalDateTime.now(),

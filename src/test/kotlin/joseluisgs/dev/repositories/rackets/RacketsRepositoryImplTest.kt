@@ -1,6 +1,7 @@
 package joseluisgs.dev.repositories.rackets
 
 import io.ktor.server.config.*
+import joseluisgs.dev.config.AppConfig
 import joseluisgs.dev.data.racketsDemoData
 import joseluisgs.dev.models.Racket
 import joseluisgs.dev.services.database.DataBaseService
@@ -21,7 +22,7 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RacketsRepositoryImplTest {
 
-    val dataBaseService = DataBaseService(ApplicationConfig("application.conf"))
+    val dataBaseService = DataBaseService(AppConfig())
     val repository = RacketsRepositoryImpl(dataBaseService)
 
 
@@ -45,10 +46,14 @@ class RacketsRepositoryImplTest {
 
     @Test
     suspend fun findById() = runTest {
-        val racket = repository.findById(1)!!
+        val test = Racket(brand = "Test Brand", model = "Test Model", price = 100.0)
+        val newRacket = repository.save(test)
+
+        val racket = repository.findById(newRacket.id)!!
         assertAll(
-            { assertEquals(1, racket.id) },
-            { assertEquals("Babolat", racket.brand) }
+            { assertEquals(test.brand, racket.brand) },
+            { assertEquals(test.model, racket.model) },
+            { assertEquals(test.price, racket.price) }
         )
     }
 
