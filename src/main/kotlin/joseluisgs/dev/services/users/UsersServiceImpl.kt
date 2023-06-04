@@ -12,6 +12,12 @@ import org.koin.core.annotation.Single
 
 private val logger = KotlinLogging.logger {}
 
+/**
+ * Users Service to our User
+ * Define the CRUD operations of our application with our Users using cache
+ * @property usersRepository UsersRepository Repository of our Users
+ * @property cacheService CacheService Cache Service to our Users
+ */
 @Single
 class UsersServiceImpl(
     private val usersRepository: UsersRepository,
@@ -105,10 +111,26 @@ class UsersServiceImpl(
         logger.debug { "isAdmin: chek if user is admin" }
         return findById(id).andThen {
             if (it.role == User.Role.ADMIN) {
+                cacheService.users.put(it.id, it)
                 Ok(true)
             } else {
                 Err(UserError.BadRole("User is not admin"))
             }
+        }
+    }
+
+    override suspend fun updateImage(id: Long, image: String): Result<User, UserError> {
+        logger.debug { "updateImage: update image user" }
+
+        // find, if exists update in cache and repository and notify
+        return findById(id).andThen {
+            Ok(usersRepository.save(
+                it.copy(
+                    avatar = image
+                )
+            ).also { res ->
+                cacheService.users.put(id, res)
+            })
         }
     }
 }

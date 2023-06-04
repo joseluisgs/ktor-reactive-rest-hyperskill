@@ -14,4 +14,5 @@ interface UsersService {
     suspend fun update(id: Long, user: User): Result<User, UserError>
     suspend fun delete(id: Long): Result<User, UserError>
     suspend fun isAdmin(id: Long): Result<Boolean, UserError>
+    suspend fun updateImage(id: Long, image: String): Result<User, UserError>
 }
