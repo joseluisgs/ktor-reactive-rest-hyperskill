@@ -5,6 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
+import joseluisgs.es.services.tokens.TokenException
 
 /**
  * Configure the Status Pages plugin and configure it
@@ -28,6 +29,11 @@ fun Application.configureStatusPages() {
         // When try to send a bad request we respond with a 400 Bad Request
         exception<IllegalArgumentException> { call, cause ->
             call.respond(HttpStatusCode.BadRequest, "${cause.message}")
+        }
+
+        // Token is not valid or expired
+        exception<TokenException.InvalidTokenException> { call, cause ->
+            call.respond(HttpStatusCode.Unauthorized, cause.message.toString())
         }
     }
 }
