@@ -51,7 +51,7 @@ class RacketsServiceImpl(
     override suspend fun findById(id: Long): Result<Racket, RacketError> {
         logger.debug { "findById: search racket by id" }
 
-        // find in cache if not found find in repository
+        // find in cache if not found in repository
         return cacheService.rackets.get(id)?.let {
             logger.debug { "findById: found in cache" }
             Ok(it)
