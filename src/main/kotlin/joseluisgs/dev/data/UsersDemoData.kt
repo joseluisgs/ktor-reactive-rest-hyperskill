@@ -10,7 +10,7 @@ fun userDemoData(): MutableMap<Long, User> = mutableMapOf(
         name = "Pepe Perez",
         username = "pepe",
         email = "pepe@perez.com",
-        password = Bcrypt.hash("pepe1234", 12).toString(),
+        password = Bcrypt.hash("pepe1234", 12).decodeToString(),
         avatar = User.DEFAULT_IMAGE,
         role = User.Role.ADMIN
     ),
@@ -19,7 +19,7 @@ fun userDemoData(): MutableMap<Long, User> = mutableMapOf(
         name = "Ana Lopez",
         username = "ana",
         email = "ana@lopez.com",
-        password = Bcrypt.hash("pepe1234", 12).toString(),
+        password = Bcrypt.hash("pepe1234", 12).decodeToString(),
         avatar = User.DEFAULT_IMAGE,
         role = User.Role.USER
     )

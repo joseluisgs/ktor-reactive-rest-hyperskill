@@ -12,7 +12,7 @@ object UserTable : H2Table<UserEntity>("users") {
     val id = autoIncrementBigInt(UserEntity::id).primaryKey()
 
     // Other fields
-    val nombre = varchar(UserEntity::name)
+    val name = varchar(UserEntity::name)
     val email = varchar(UserEntity::email)
     val username = varchar(UserEntity::username)
     val password = varchar(UserEntity::password)

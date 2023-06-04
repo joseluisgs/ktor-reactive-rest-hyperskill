@@ -17,7 +17,7 @@ data class User(
 
     companion object {
         const val NEW_USER = -1L
-        const val DEFAULT_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png"
+        const val DEFAULT_IMAGE = "https://i.imgur.com/fIgch2x.png"
     }
 
     enum class Role {
