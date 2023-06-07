@@ -21,13 +21,10 @@ import joseluisgs.dev.mappers.toModel
 import joseluisgs.dev.mappers.toResponse
 import joseluisgs.dev.services.rackets.RacketsService
 import joseluisgs.dev.services.storage.StorageService
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.toList
 import mu.KotlinLogging
 import org.koin.ktor.ext.inject
 import java.io.File
-import java.time.LocalDateTime
 import org.koin.ktor.ext.get as koinGet
 
 private val logger = KotlinLogging.logger {}
@@ -336,22 +333,12 @@ fun Application.racketsRoutes() {
         webSocket("/$ENDPOINT/notifications") {
 
             sendSerialized("Notifications WS: Rackets - Rackets API")
-            val initTime = LocalDateTime.now()
             // Remeber it will autoclose the connection, see config
             // Now we can listen and react to the changes in the StateFlow
-            racketsService.notificationState
-                // Sometimes we need to do something when we start
-                .onStart {
-                    logger.debug { "notificationState: onStart to ${this.hashCode()}" }
-                    // Sometimes we need to filter any values
-                }.filter {
-                    // we filter the values: we only send the ones that are not empty and are after the init time
-                    it.entity.isNotEmpty() && it.createdAt.isAfter(initTime)
-                    // we collect the values and send them to the client
-                }.collect {
-                    logger.debug { "notificationState: collect $it and sent to ${this.hashCode()}" }
-                    sendSerialized(it) // WS function to send the message to the client
-                }
+            racketsService.notificationState.collect {
+                logger.debug { "notificationState: collect $it and sent to ${this.hashCode()}" }
+                sendSerialized(it) // WS function to send the message to the client
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ import joseluisgs.dev.dto.RacketNotification
 import joseluisgs.dev.errors.racket.RacketError
 import joseluisgs.dev.models.Racket
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.SharedFlow
 
 /**
  * Rackets Service to our Rackets
@@ -22,5 +22,5 @@ interface RacketsService {
     suspend fun updateImage(id: Long, image: String): Result<Racket, RacketError>
 
     // Notifications state
-    val notificationState: StateFlow<RacketNotification>
+    val notificationState: SharedFlow<RacketNotification>
 }
