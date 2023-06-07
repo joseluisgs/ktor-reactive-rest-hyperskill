@@ -18,7 +18,7 @@ data class NotificacionDto<T>(
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
-    enum class NotificationType { CREATE, UPDATE, DELETE, OTHER }
+    enum class NotificationType { CREATE, UPDATE, DELETE }
 }
 
 // My notifications types

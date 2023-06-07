@@ -11,9 +11,10 @@ import joseluisgs.dev.mappers.toResponse
 import joseluisgs.dev.models.Racket
 import joseluisgs.dev.repositories.rackets.RacketsRepository
 import joseluisgs.dev.services.cache.CacheService
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import mu.KotlinLogging
 import org.koin.core.annotation.Singleton
 
@@ -169,25 +170,22 @@ class RacketsServiceImpl(
     }
 
     // Real Time Notifications and WebSockets
-    // We can notify use a reactive system with StateFlow
-    private val _notificationState: MutableStateFlow<RacketNotification> = MutableStateFlow(
-        RacketNotification(
-            entity = "",
-            type = NotificationType.OTHER,
-            id = null,
-            data = null
-        )
-    )
-    override val notificationState: StateFlow<RacketNotification> = _notificationState
+    // We can notify use a reactive system with SharedFlow
+    private val _notificationState: MutableSharedFlow<RacketNotification> =
+        MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    override val notificationState = _notificationState.asSharedFlow()
 
     private suspend fun onChange(type: NotificationType, id: Long, data: Racket) {
         logger.debug { "onChange: Notification on Rackets: $type, notification updates to subscribers: $data" }
         // update notification state
-        _notificationState.value = RacketNotification(
-            entity = "RACKET",
-            type = type,
-            id = id,
-            data = data.toResponse()
+        _notificationState.tryEmit(
+            RacketNotification(
+                entity = "RACKET",
+                type = type,
+                id = id,
+                data = data.toResponse()
+            )
         )
     }
 }

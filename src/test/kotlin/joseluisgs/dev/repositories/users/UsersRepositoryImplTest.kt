@@ -150,7 +150,7 @@ class UsersRepositoryImplTest {
         )
 
         val res = repository.save(user)
-        val deleted = repository.delete(user)
+        repository.delete(user)
         val exists = repository.findById(user.id)
 
         assertAll(

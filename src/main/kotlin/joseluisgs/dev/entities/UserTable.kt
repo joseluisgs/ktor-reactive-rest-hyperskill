@@ -32,10 +32,10 @@ object UserTable : H2Table<UserEntity>("users") {
  * Or adapt some fields type to the database
  */
 data class UserEntity(
-    // Identificador
+    // Id
     val id: Long?, //
 
-    // Datos
+    // data
     val name: String,
     val email: String,
     val username: String,

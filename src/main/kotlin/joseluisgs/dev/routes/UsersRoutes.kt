@@ -117,7 +117,7 @@ fun Application.usersRoutes() {
                 patch("/me") {
                     logger.debug { "PUT Me /$ENDPOINT/me" }
 
-                    // Por el token me llega como principal (autenticado) el usuario en sus claims
+                    // Token came with principal (authenticated) user in its claims
                     val userId = call.principal<JWTPrincipal>()
                         ?.payload?.getClaim("userId")
                         .toString().replace("\"", "").toLong()

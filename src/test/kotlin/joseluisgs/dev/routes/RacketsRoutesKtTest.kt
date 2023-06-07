@@ -243,7 +243,7 @@ class RacketsRoutesKtTest {
         }
 
         val result = response.bodyAsText()
-        var dto = json.decodeFromString<RacketResponse>(result)
+        val dto = json.decodeFromString<RacketResponse>(result)
 
         val boundary = "WebAppBoundary"
         response = client.patch("/api/rackets/${dto.id}") {

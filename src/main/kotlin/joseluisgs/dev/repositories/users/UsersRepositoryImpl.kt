@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
-import org.koin.core.annotation.Single
+import org.koin.core.annotation.Singleton
 import java.time.LocalDateTime
 
 private val logger = KotlinLogging.logger {}
@@ -21,7 +21,7 @@ private const val BCRYPT_SALT = 12
  * Users Repository
  * @property dataBaseService Database service
  */
-@Single
+@Singleton
 class UsersRepositoryImpl(
     private val dataBaseService: DataBaseService
 ) : UsersRepository {

@@ -116,7 +116,7 @@ dependencies {
     // BCrypt
     implementation("com.ToxicBakery.library.bcrypt:bcrypt:$bcrypt_version")
 
-    // Para documentar con Swagger y Open API sobre la marcha en nuestro codigo con DSL
+    // To generate Swagger UI
     implementation("io.github.smiley4:ktor-swagger-ui:$ktor_swagger_ui_version")
 
     // *** Testing *** //

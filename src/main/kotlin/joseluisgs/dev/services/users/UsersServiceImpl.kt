@@ -8,7 +8,7 @@ import joseluisgs.dev.repositories.users.UsersRepository
 import joseluisgs.dev.services.cache.CacheService
 import kotlinx.coroutines.flow.Flow
 import mu.KotlinLogging
-import org.koin.core.annotation.Single
+import org.koin.core.annotation.Singleton
 
 private val logger = KotlinLogging.logger {}
 
@@ -18,7 +18,7 @@ private val logger = KotlinLogging.logger {}
  * @property usersRepository UsersRepository Repository of our Users
  * @property cacheService CacheService Cache Service to our Users
  */
-@Single
+@Singleton
 class UsersServiceImpl(
     private val usersRepository: UsersRepository,
     private val cacheService: CacheService

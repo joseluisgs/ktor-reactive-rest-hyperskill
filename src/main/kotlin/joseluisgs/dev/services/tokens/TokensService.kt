@@ -42,7 +42,7 @@ class TokensService(
     }
 
     init {
-        logger.debug { "Iniciando servicio de tokens con audience: $audience" }
+        logger.debug { "Init tokens service with audience: $audience" }
     }
 
     /**

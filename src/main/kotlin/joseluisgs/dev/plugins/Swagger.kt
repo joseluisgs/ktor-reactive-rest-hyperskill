@@ -18,7 +18,7 @@ fun Application.configureSwagger() {
             version = "latest"
             description = "Example of a Ktor API REST using Kotlin and Ktor"
             contact {
-                name = "Jose Luis González Sánchez"
+                name = "José Luis González Sánchez"
                 url = "https://github.com/joseluisgs"
             }
             license {
